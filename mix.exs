@@ -20,7 +20,7 @@ defmodule Manga2gether.MixProject do
   def application do
     [
       mod: {Manga2gether.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :ueberauth, :ueberauth_discord]
     ]
   end
 
@@ -48,7 +48,9 @@ defmodule Manga2gether.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:phx_gen_auth, "~> 0.7", only: [:dev], runtime: false}
+      {:phx_gen_auth, "~> 0.7", only: [:dev], runtime: false},
+      {:ueberauth, "~> 0.6"},
+      {:ueberauth_discord, "~> 0.6"}
     ]
   end
 

@@ -18,7 +18,7 @@ defmodule Manga2getherWeb.Router do
   end
 
   scope "/", Manga2getherWeb do
-    pipe_through :browser
+    pipe_through [:browser, :require_authenticated_user]
 
     live "/", PageLive, :index
   end
@@ -74,5 +74,12 @@ defmodule Manga2getherWeb.Router do
     get "/users/confirm", UserConfirmationController, :new
     post "/users/confirm", UserConfirmationController, :create
     get "/users/confirm/:token", UserConfirmationController, :confirm
+  end
+
+  scope "/auth", Manga2getherWeb do
+    pipe_through [:browser]
+
+    get "/:provider", UserOAuthController, :request
+    get "/:provider/callback", UserOAuthController, :callback
   end
 end

@@ -504,4 +504,38 @@ defmodule Manga2gether.AccountsTest do
       refute inspect(%User{password: "123456"}) =~ "password: \"123456\""
     end
   end
+
+  describe "discord_find_or_create/1" do
+    test "finds existing  user" do
+      # register user with discord_id
+      user = user_fixture(%{username: "rob", discord_id: valid_discord_id()})
+      ueberauth = ueberauth_fixture()
+      assert {:find, existing_user} = Accounts.discord_find_or_create(ueberauth)
+      assert existing_user.discord_id == user.discord_id
+      assert existing_user.email == user.email
+    end
+
+    test "links discord_id of user with existing email" do
+      ueberauth = ueberauth_fixture()
+      # create user with same email
+      user =
+        custom_user_fixture(%{
+          username: "rob",
+          email: ueberauth.info.email,
+          password: valid_user_password()
+        })
+
+      assert {:link, updated_user} = Accounts.discord_find_or_create(ueberauth)
+      assert updated_user.discord_id == ueberauth.uid
+    end
+
+    test "creates new user" do
+      ueberauth = ueberauth_fixture()
+      # IO.inspect(ueberauth)
+      assert {:create, new_user} = Accounts.discord_find_or_create(ueberauth)
+      assert new_user.discord_id == ueberauth.uid
+      assert new_user.username == "username"
+      assert new_user.email == ueberauth.info.email
+    end
+  end
 end

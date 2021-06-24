@@ -346,4 +346,52 @@ defmodule Manga2gether.Accounts do
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
+
+  ## Discord
+
+  @doc """
+  Either finds existing user with discord_id, links discord_id with existing user of same email, or creates new user
+  """
+  def discord_find_or_create(user) do
+    discord_id = user.uid
+    db_user = Repo.get_by(User, discord_id: discord_id)
+
+    # Found existing user
+    if db_user do
+      {:find, db_user}
+    else
+      email_user = Repo.get_by(User, email: user.info.email)
+
+      # Existing email used, link discord_id
+      if email_user do
+        {1, updated_user} =
+          from(u in User,
+            where: u.email == ^user.info.email,
+            update: [
+              set: [
+                discord_id: ^discord_id
+              ]
+            ],
+            select: u
+          )
+          |> Repo.update_all([])
+
+        {:link, hd(updated_user)}
+      else
+        # Create new user
+        case register_user(%{
+               email: user.info.email,
+               password: :crypto.strong_rand_bytes(32) |> Base.encode64(),
+               username: user.extra.raw_info.user["username"],
+               discord_id: discord_id
+             }) do
+          {:ok, user} ->
+            {:create, user}
+
+          {:error, changeset} ->
+            changeset
+        end
+      end
+    end
+  end
 end
