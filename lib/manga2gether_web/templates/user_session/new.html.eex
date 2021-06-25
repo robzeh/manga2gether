@@ -1,28 +1,47 @@
-<h1>Log in</h1>
-
-<%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user], fn f -> %>
-  <%= if @error_message do %>
-    <div class="alert alert-danger">
-      <p><%= @error_message %></p>
-    </div>
-  <% end %>
-
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
-
-  <%= label f, :password %>
-  <%= password_input f, :password, required: true %>
-
-  <%= label f, :remember_me, "Keep me logged in for 60 days" %>
-  <%= checkbox f, :remember_me %>
-
-  <div>
-    <%= submit "Log in" %>
+<div class="w-screen h-screen flex flex-col items-center bg-gray-800">
+	<div class="pt-10">
+	  <h1 class="text-3xl text-center font-bold text-white">manga2gether</h1>
+	</div>
+  <div class="p-5">
+	  <h2 class="text-3xl text-center font-bold text-white">Login</h2>
+    <p class="pt-2 text-white text-center text-sm hover:text-purple-500"><%= link "Or register for an account", to: Routes.user_registration_path(@conn, :new) %></p>
   </div>
-<% end %>
 
-<p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %> |
-	<%= link "Login with Discord", to: Routes.user_o_auth_path(@conn, :request, "discord") %>
-</p>
+	<div class="w-10/12 h-1/2 max-w-lg bg-gray-500 rounded-lg ">
+    <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user], fn f -> %>
+      <%= if @error_message do %>
+        <div class="alert alert-danger">
+          <p><%= @error_message %></p>
+        </div>
+      <% end %>
+
+      <div class="py-16 px-20">
+        <div>
+          <%= label f, :email, class: "block text-sm py-1" %>
+          <%= email_input f, :email, required: true, class: "w-full rounded p-1" %>
+        </div>
+
+        <div>
+          <%= label f, :password, class: "block text-sm py-1" %>
+          <%= password_input f, :password, required: true, class: "w-full rounded p-1" %>
+        </div>
+
+        <div>
+          <%= label f, :remember_me, "Keep me logged in for 60 days" %>
+          <%= checkbox f, :remember_me %>
+        </div>
+
+        <div>
+          <%= submit "Log in", class: "bg-purple-600 hover:bg-purple-500 text-center text-white p-2 rounded w-full" %>
+        </div>
+
+        <p>
+          <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
+          <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %> |
+        	<%= link "Login with Discord", to: Routes.user_o_auth_path(@conn, :request, "discord") %>
+        </p>
+      </div>
+    <% end %>
+
+  </div>
+</div>

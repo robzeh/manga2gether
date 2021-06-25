@@ -9,7 +9,8 @@ use Mix.Config
 
 config :manga2gether,
   ecto_repos: [Manga2gether.Repo],
-  generators: [binary_id: true]
+  generators: [binary_id: true],
+  migration_primary_key: [id: :uuid, type: :binary_id]
 
 # Configures the endpoint
 config :manga2gether, Manga2getherWeb.Endpoint,

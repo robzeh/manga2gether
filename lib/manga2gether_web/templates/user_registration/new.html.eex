@@ -1,31 +1,51 @@
-<h1>Register</h1>
+<div class="w-screen h-screen flex flex-col items-center bg-gray-800">
+	<div class="pt-10">
+	  <h1 class="text-3xl text-center font-bold text-white">manga2gether</h1>
+	</div>
+	<div class="p-5">
+	  <h2 class="text-3xl text-center font-bold text-white">Register</h2>
+		<p class="pt-2 text-white text-center text-sm hover:text-purple-500"><%= link "Or log in", to: Routes.user_session_path(@conn, :new) %></p>
+	</div>
 
-<%= form_for @changeset, Routes.user_registration_path(@conn, :create), fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
-  <% end %>
+	<div class="w-10/12 h-1/2 max-w-lg bg-gray-500 rounded-lg ">
+	  <%= form_for @changeset, Routes.user_registration_path(@conn, :create), fn f -> %>
+	    <%= if @changeset.action do %>
+	      <div class="">
+	        <p>Oops, something went wrong! Please check the errors below.</p>
+	      </div>
+	    <% end %>
 
-  <%= label f, :username %>
-  <%= text_input f, :username, required: true %>
-  <%= error_tag f, :username %>
+			<div class="py-16 px-20">
+				<div>
+	  	    <%= label f, :username, class: "block text-sm py-1" %>
+	  	    <%= text_input f, :username, required: true, class: "w-full rounded p-1" %>
+	  	    <%= error_tag f, :username %>
+				</div>
 
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
-  <%= error_tag f, :email %>
+				<div>
+	  	  	<%= label f, :email, class: "block text-sm py-1" %>
+	  	  	<%= email_input f, :email, required: true, class: "w-full rounded p-1" %>
+	  	  	<%= error_tag f, :email %>
+				</div>
 
-  <%= label f, :password %>
-  <%= password_input f, :password, required: true %>
-  <%= error_tag f, :password %>
+				<div>
+	  	  	<%= label f, :password, class: "block text-sm py-1" %>
+	  	  	<%= password_input f, :password, required: true, class: "w-full rounded p-1" %>
+	  	  	<%= error_tag f, :password %>
+				</div>
 
-  <div>
-    <%= submit "Register" %>
-  </div>
-<% end %>
+	  	  <div class="pt-2">
+	  	    <%= submit "Register", class: "bg-purple-600 hover:bg-purple-500 text-center text-white p-2 rounded w-full" %>
+	  	  </div>
 
-<p>
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %> |
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %> |
-	<%= link "Login with Discord", to: Routes.user_o_auth_path(@conn, :request, "discord") %>
-</p>
+	  		<p>
+	  		  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %> |
+	  			<%= link "Login with Discord", to: Routes.user_o_auth_path(@conn, :request, "discord") %>
+	  		</p>
+
+			</div>
+	  <% end %>
+
+
+	</div>
+</div>

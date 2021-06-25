@@ -1,0 +1,29 @@
+<h2 class="text-xl text-white text-bold"><%= @title %></h2>
+
+<%= f = form_for @changeset, "#",
+  id: "room-form",
+  phx_target: @myself,
+  phx_change: "validate",
+  phx_submit: "save",
+	class: "h-full w-1/2 p-5 flex flex-col m-auto" %>
+
+	<div>
+  	<%= label f, :name %>
+  	<%= text_input f, :name, class: "w-full rounded p-1" %>
+  	<%= error_tag f, :name %>
+	</div>
+
+	<div>
+    <%= label f, :description %>
+    <%= text_input f, :description, class: "w-full rounded p-1" %>
+    <%= error_tag f, :description %>
+	</div>
+
+	<!--
+  <%= label f, :room_code %>
+  <%= number_input f, :room_code %>
+  <%= error_tag f, :room_code %>
+	-->
+
+  <%= submit "Create", phx_disable_with: "Creating...", class: "bg-purple-600 text-white rounded p-2 mt-2" %>
+</form>

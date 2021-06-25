@@ -20,7 +20,14 @@ defmodule Manga2getherWeb.Router do
   scope "/", Manga2getherWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    live "/", PageLive, :index
+    # live "/", PageLive, :index
+
+    live "/", RoomLive.Index, :index
+    live "/room/new", RoomLive.Index, :new
+    live "/room/:id/edit", RoomLive.Index, :edit
+
+    live "/room/:id", RoomLive.Show, :show
+    live "/room/:id/show/edit", RoomLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

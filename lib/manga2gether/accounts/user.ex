@@ -13,6 +13,8 @@ defmodule Manga2gether.Accounts.User do
     field :username, :string
     field :discord_id, :string
 
+    has_one :room, Manga2gether.Rooms.Room, references: :id, foreign_key: :owner_id
+
     timestamps()
   end
 
