@@ -3,15 +3,23 @@ defmodule Manga2getherWeb.UserOAuthController do
 
   plug Ueberauth
 
+  alias Manga2gether.Accounts
+  alias Manga2getherWeb.UserAuth
+
   @doc """
   Successful Discord authentication callback. Either finds existing user with discord_id,
   links discord_id for user with existing email, or creates new user
   """
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, %{"provider" => "discord"}) do
-    IO.inspect(conn)
+    case Accounts.discord_find_or_create(auth) do
+      {result, user} when result in [:find, :link, :create] ->
+        conn
+        |> UserAuth.log_in_user(user)
 
-    conn
-    |> redirect(to: "/")
+      {:error, _} ->
+        conn
+        |> redirect(to: "/")
+    end
   end
 
   # Unsuccessful Discord authentication callback. Redirects to log in page

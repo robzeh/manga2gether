@@ -18,7 +18,8 @@ defmodule Manga2getherWeb.UserSettingsController do
       {:ok, applied_user} ->
         Accounts.deliver_update_email_instructions(
           applied_user,
-          user.email,
+          user["email"],
+          # user.email,
           &Routes.user_settings_url(conn, :confirm_email, &1)
         )
 

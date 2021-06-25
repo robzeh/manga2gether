@@ -349,6 +349,8 @@ defmodule Manga2gether.Accounts do
 
   ## Discord
 
+  # TODO: Improve
+  @spec discord_find_or_create(atom | %{:uid => any, optional(any) => any}) :: any
   @doc """
   Either finds existing user with discord_id, links discord_id with existing user of same email, or creates new user
   """
