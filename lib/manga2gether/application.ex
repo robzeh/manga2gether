@@ -15,6 +15,8 @@ defmodule Manga2gether.Application do
       {Phoenix.PubSub, name: Manga2gether.PubSub},
       # Room Registry
       {Registry, keys: :unique, name: Manga2gether.RoomRegistry},
+      # Dynamic Room Supervisor
+      Manga2gether.RoomSupervisor,
       # Start the Endpoint (http/https)
       Manga2getherWeb.Endpoint
       # Start a worker by calling: Manga2gether.Worker.start_link(arg)
