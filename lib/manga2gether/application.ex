@@ -26,7 +26,15 @@ defmodule Manga2gether.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Manga2gether.Supervisor]
-    Supervisor.start_link(children, opts)
+
+    case Supervisor.start_link(children, opts) do
+      {:ok, pid} ->
+        start_rooms()
+        {:ok, pid}
+
+      error ->
+        error
+    end
   end
 
   # Tell Phoenix to update the endpoint configuration
@@ -34,5 +42,16 @@ defmodule Manga2gether.Application do
   def config_change(changed, _new, removed) do
     Manga2getherWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  # Start room servers for rooms already in database
+  defp start_rooms() do
+    Enum.each(Manga2gether.Rooms.list_rooms(), fn room ->
+      Manga2gether.RoomSupervisor.start_room(%{
+        room_id: room.id,
+        room_code: room.room_code,
+        owner_id: room.owner_id
+      })
+    end)
   end
 end
