@@ -8,6 +8,10 @@ defmodule Manga2getherWeb.RoomLive.Index do
 
   @impl true
   def mount(_params, %{"user_token" => session_token} = _session, socket) do
+    if connected?(socket) do
+      Manga2getherWeb.Endpoint.subscribe("rooms")
+    end
+
     {:ok,
      socket
      |> assign(:rooms, list_rooms())
@@ -43,12 +47,22 @@ defmodule Manga2getherWeb.RoomLive.Index do
     {:ok, _} = Rooms.delete_room(room)
     :ok = RoomSupervisor.stop_room(room.room_code)
 
+    rooms = list_rooms()
+    Manga2getherWeb.Endpoint.broadcast!("rooms", "new_room", %{rooms: rooms})
+
     {:noreply, assign(socket, :rooms, list_rooms())}
   end
 
   @impl true
   def handle_event("join_room", %{"code" => room_code} = _params, socket) do
     {:noreply, push_redirect(socket, to: Routes.room_show_path(socket, :show, room_code))}
+  end
+
+  @impl true
+  def handle_info(%{event: "new_room", payload: %{rooms: rooms}} = _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:rooms, rooms)}
   end
 
   defp list_rooms do

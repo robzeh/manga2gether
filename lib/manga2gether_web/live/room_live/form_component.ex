@@ -50,6 +50,9 @@ defmodule Manga2getherWeb.RoomLive.FormComponent do
              room_code: room.room_code,
              owner_id: room.owner_id
            }) do
+      rooms = Rooms.list_rooms()
+      Manga2getherWeb.Endpoint.broadcast("rooms", "new_room", %{rooms: rooms})
+
       {:noreply,
        socket
        |> put_flash(:info, "Room created successfully")
