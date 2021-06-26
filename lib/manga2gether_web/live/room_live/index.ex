@@ -4,6 +4,7 @@ defmodule Manga2getherWeb.RoomLive.Index do
   alias Manga2gether.Accounts
   alias Manga2gether.Rooms
   alias Manga2gether.Rooms.Room
+  alias Manga2gether.RoomSupervisor
 
   @impl true
   def mount(_params, %{"user_token" => session_token} = _session, socket) do
@@ -40,6 +41,7 @@ defmodule Manga2getherWeb.RoomLive.Index do
   def handle_event("delete", %{"id" => id}, socket) do
     room = Rooms.get_room!(id)
     {:ok, _} = Rooms.delete_room(room)
+    :ok = RoomSupervisor.stop_room(room.room_code)
 
     {:noreply, assign(socket, :rooms, list_rooms())}
   end

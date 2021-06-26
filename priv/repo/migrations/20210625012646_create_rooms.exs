@@ -12,6 +12,6 @@ defmodule Manga2gether.Repo.Migrations.CreateRooms do
       timestamps()
     end
 
-    create index(:rooms, [:owner_id])
+    create unique_index(:rooms, [:owner_id])
   end
 end

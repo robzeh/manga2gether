@@ -2,6 +2,7 @@ defmodule Manga2getherWeb.RoomLive.FormComponent do
   use Manga2getherWeb, :live_component
 
   alias Manga2gether.Rooms
+  alias Manga2gether.RoomSupervisor
 
   @impl true
   def update(%{room: room} = assigns, socket) do
@@ -15,8 +16,6 @@ defmodule Manga2getherWeb.RoomLive.FormComponent do
 
   @impl true
   def handle_event("validate", %{"room" => room_params}, socket) do
-    IO.inspect(socket)
-
     changeset =
       socket.assigns.room
       |> Rooms.change_room(room_params)
@@ -44,17 +43,23 @@ defmodule Manga2getherWeb.RoomLive.FormComponent do
   end
 
   defp save_room(socket, :new, room_params) do
-    IO.inspect(room_params)
-
-    case Rooms.create_room(room_params) do
-      {:ok, _room} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, "Room created successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
-
+    with {:ok, room} <- Rooms.create_room(room_params),
+         {:ok, _} <-
+           RoomSupervisor.start_room(%{
+             room_id: room.id,
+             room_code: room.room_code,
+             owner_id: room.owner_id
+           }) do
+      {:noreply,
+       socket
+       |> put_flash(:info, "Room created successfully")
+       |> push_redirect(to: Routes.room_show_path(socket, :show, room.room_code))}
+    else
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
+
+      error ->
+        error
     end
   end
 end
