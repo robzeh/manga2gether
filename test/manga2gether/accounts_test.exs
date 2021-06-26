@@ -531,7 +531,6 @@ defmodule Manga2gether.AccountsTest do
 
     test "creates new user" do
       ueberauth = ueberauth_fixture()
-      # IO.inspect(ueberauth)
       assert {:create, new_user} = Accounts.discord_find_or_create(ueberauth)
       assert new_user.discord_id == ueberauth.uid
       assert new_user.username == "username"

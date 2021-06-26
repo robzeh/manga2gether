@@ -350,10 +350,11 @@ defmodule Manga2gether.Accounts do
   ## Discord
 
   # TODO: Improve
-  @spec discord_find_or_create(atom | %{:uid => any, optional(any) => any}) :: any
   @doc """
   Either finds existing user with discord_id, links discord_id with existing user of same email, or creates new user
   """
+  @spec discord_find_or_create(%{optional(any) => any}) ::
+          {:find, %User{}} | {:link, %User{}} | {:create, %User{}}
   def discord_find_or_create(user) do
     discord_id = user.uid
     db_user = Repo.get_by(User, discord_id: discord_id)
@@ -384,7 +385,8 @@ defmodule Manga2gether.Accounts do
         case register_user(%{
                email: user.info.email,
                password: :crypto.strong_rand_bytes(32) |> Base.encode64(),
-               username: user.extra.raw_info.user["username"],
+               username: user.extra.raw_info.user.username,
+               #  username: user.extra.raw_info.user["username"],
                discord_id: discord_id
              }) do
           {:ok, user} ->

@@ -1,4 +1,4 @@
-# Manga2gether
+# manga2gether
 
 To start your Phoenix server:
 
