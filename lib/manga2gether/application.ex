@@ -17,6 +17,8 @@ defmodule Manga2gether.Application do
       {Registry, keys: :unique, name: Manga2gether.RoomRegistry},
       # Dynamic Room Supervisor
       Manga2gether.RoomSupervisor,
+      # Phoenix Presence
+      Manga2getherWeb.Presence,
       # Start the Endpoint (http/https)
       Manga2getherWeb.Endpoint
       # Start a worker by calling: Manga2gether.Worker.start_link(arg)

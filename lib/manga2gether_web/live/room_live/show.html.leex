@@ -28,5 +28,11 @@
 
 </ul>
 
+<div>
+  <%= for user <- @current_room.users do %>
+	  <p><%= user %> </p>
+	<% end %>
+</div>
+
 <span><%= live_patch "Edit", to: Routes.room_show_path(@socket, :edit, @room), class: "button" %></span>
 <span><%= live_redirect "Back", to: Routes.room_index_path(@socket, :index) %></span>

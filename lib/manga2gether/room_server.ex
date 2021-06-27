@@ -14,6 +14,8 @@ defmodule Manga2gether.RoomServer do
   @impl true
   @spec init(map()) :: {:ok, Manga2gether.RoomSession.t()}
   def init(room) do
+    # Subscribe to room's presence
+    Manga2getherWeb.Endpoint.subscribe("room:#{room.room_code}")
     {:ok, RoomSession.new(room)}
   end
 
@@ -37,6 +39,10 @@ defmodule Manga2gether.RoomServer do
     |> GenServer.whereis()
   end
 
+  defp broadcast!(room_code, event, message) do
+    Manga2getherWeb.Endpoint.broadcast!("room:#{room_code}", event, message)
+  end
+
   ################################################################################
   ### Client
 
@@ -51,5 +57,17 @@ defmodule Manga2gether.RoomServer do
   @impl true
   def handle_call(:get_room, _reply, state) do
     {:reply, state, state}
+  end
+
+  @impl true
+  def handle_info(%{event: "presence_diff"} = _message, %{room_code: room_code} = state) do
+    users = Manga2getherWeb.Presence.list_keys(room_code)
+    broadcast!(room_code, "updated_users", %{users: users})
+    {:noreply, %{state | users: users}}
+  end
+
+  @impl true
+  def handle_info(_message, state) do
+    {:noreply, state}
   end
 end
