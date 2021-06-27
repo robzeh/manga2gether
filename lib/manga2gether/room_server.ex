@@ -1,6 +1,7 @@
 defmodule Manga2gether.RoomServer do
   use GenServer
 
+  alias Manga2gether.MangaSession
   alias Manga2gether.RoomSession
 
   ################################################################################
@@ -51,12 +52,36 @@ defmodule Manga2gether.RoomServer do
     call(room_code, :get_room)
   end
 
+  @spec set_manga(integer(), map()) :: :ok
+  def set_manga(room_code, manga) do
+    cast(room_code, {:set_manga, manga})
+  end
+
+  @spec set_reading(integer(), boolean()) :: :ok
+  def set_reading(room_code, status) do
+    cast(room_code, {:set_reading, status})
+  end
+
   ################################################################################
   ### Server
 
   @impl true
   def handle_call(:get_room, _reply, state) do
+    IO.inspect(state)
     {:reply, state, state}
+  end
+
+  @impl true
+  def handle_cast({:set_manga, manga}, state) do
+    new_manga = MangaSession.new(manga)
+    # TODO: broadcast?
+    {:noreply, %{state | manga: new_manga}}
+  end
+
+  @impl true
+  def handle_cast({:set_reading, status}, state) do
+    broadcast!(state.room_code, "reading_status", %{reading: status})
+    {:noreply, %{state | reading: status}}
   end
 
   @impl true

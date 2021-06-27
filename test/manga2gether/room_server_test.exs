@@ -1,7 +1,16 @@
 defmodule Manga2gether.RoomServerTest do
   use Manga2gether.DataCase
-  alias Manga2gether.{RoomServer, RoomSession, RoomSupervisor}
+  alias Manga2gether.{MangaSession, RoomServer, RoomSession, RoomSupervisor}
   import Manga2gether.RoomFixtures
+
+  describe "MangaSession.new/1" do
+    test "manga struct is created" do
+      manga = valid_manga_attributes()
+      manga_struct = MangaSession.new(manga)
+
+      assert %MangaSession{} = manga_struct
+    end
+  end
 
   describe "RoomSession.new/1" do
     test "struct is created from map" do
@@ -9,6 +18,25 @@ defmodule Manga2gether.RoomServerTest do
       room_struct = RoomSession.new(room)
 
       assert %RoomSession{} = room_struct
+    end
+  end
+
+  describe "RoomServer cast/calls" do
+    test "reading status is set to true" do
+      state = valid_room_state()
+      {:noreply, new_state} = RoomServer.handle_cast({:set_reading, true}, state)
+
+      assert new_state.reading == true
+    end
+
+    test "reading status is set to false" do
+      state = valid_room_state()
+      {:noreply, new_state} = RoomServer.handle_cast({:set_reading, true}, state)
+      assert new_state.reading == true
+
+      {:noreply, final_state} = RoomServer.handle_cast({:set_reading, false}, new_state)
+
+      assert final_state.reading == false
     end
   end
 
