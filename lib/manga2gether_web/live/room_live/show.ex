@@ -4,6 +4,7 @@ defmodule Manga2getherWeb.RoomLive.Show do
   alias Manga2gether.Accounts
   alias Manga2gether.Rooms
   alias Manga2gether.RoomServer
+  alias Manga2gether.RoomUser
 
   @impl true
   def mount(
@@ -11,29 +12,25 @@ defmodule Manga2getherWeb.RoomLive.Show do
         %{"user_token" => session_token} = _session,
         socket
       ) do
-    user = assign_user(socket, session_token)
+    user = assign_user(socket, session_token) |> Map.get(:assigns) |> Map.get(:current_user)
     room = RoomServer.get_room(String.to_integer(room_code))
 
     if connected?(socket) do
+      room_user = RoomUser.new(%{username: user.username})
       Manga2getherWeb.Endpoint.subscribe("room:#{room_code}")
 
       Manga2getherWeb.Presence.track(
         self(),
         "room:#{room_code}",
-        user.assigns.current_user.id,
-        %{username: user.assigns.current_user.username}
+        user.id,
+        room_user
       )
     end
 
-    {:ok, socket |> assign(:current_room, room)}
-  end
-
-  @impl true
-  def handle_params(%{"room_code" => room_code}, _, socket) do
-    {:noreply,
+    {:ok,
      socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:room, Rooms.get_room!(room_code))}
+     |> assign(:current_room, room)
+     |> assign(:owner, RoomServer.is_owner(room_code, user.id))}
   end
 
   @impl true

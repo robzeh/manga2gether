@@ -40,6 +40,17 @@ defmodule Manga2gether.RoomServer do
     |> GenServer.whereis()
   end
 
+  @doc """
+  Returns boolean of whether user is owner of room
+  """
+  @spec is_owner(binary(), Ecto.UUID.t()) :: boolean()
+  def is_owner(room_code, user_id) do
+    room_code
+    |> String.to_integer()
+    |> get_room()
+    |> Map.get(:owner_id) == user_id
+  end
+
   defp broadcast!(room_code, event, message) do
     Manga2getherWeb.Endpoint.broadcast!("room:#{room_code}", event, message)
   end
@@ -67,7 +78,6 @@ defmodule Manga2gether.RoomServer do
 
   @impl true
   def handle_call(:get_room, _reply, state) do
-    IO.inspect(state)
     {:reply, state, state}
   end
 
@@ -86,7 +96,7 @@ defmodule Manga2gether.RoomServer do
 
   @impl true
   def handle_info(%{event: "presence_diff"} = _message, %{room_code: room_code} = state) do
-    users = Manga2getherWeb.Presence.list_keys(room_code)
+    users = Manga2getherWeb.Presence.list_users(room_code)
     broadcast!(room_code, "updated_users", %{users: users})
     {:noreply, %{state | users: users}}
   end

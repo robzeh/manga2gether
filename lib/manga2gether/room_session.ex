@@ -1,5 +1,6 @@
 defmodule Manga2gether.RoomSession do
   alias Manga2gether.MangaSession
+  alias Manga2gether.RoomUser
 
   # TODO: really need id, owner?
   defstruct room_id: nil,
@@ -13,7 +14,7 @@ defmodule Manga2gether.RoomSession do
           room_id: Ecto.UUID.t(),
           room_code: integer(),
           owner_id: Ecto.UUID.t(),
-          users: list(String.t()),
+          users: list(RoomUser.t()),
           reading: boolean(),
           manga: MangaSession.t()
         }

@@ -51,7 +51,7 @@ defmodule Manga2gether.AccountsFixtures do
       extra: %{
         raw_info: %{
           user: %{
-            username: "username"
+            "username" => "username"
           }
         }
       }

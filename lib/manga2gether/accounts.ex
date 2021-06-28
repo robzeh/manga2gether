@@ -385,8 +385,7 @@ defmodule Manga2gether.Accounts do
         case register_user(%{
                email: user.info.email,
                password: :crypto.strong_rand_bytes(32) |> Base.encode64(),
-               username: user.extra.raw_info.user.username,
-               #  username: user.extra.raw_info.user["username"],
+               username: user.extra.raw_info.user["username"],
                discord_id: discord_id
              }) do
           {:ok, user} ->
