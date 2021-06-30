@@ -29,8 +29,22 @@ defmodule Manga2getherWeb.RoomLive.Show do
     {:ok,
      socket
      |> assign(:current_room, room)
-     |> assign(:owner, RoomServer.is_owner(room_code, user.id))}
+     |> assign(:current_user, user)
+     |> assign(:owner, RoomServer.is_owner(room_code, user.id))
+     |> assign(:messages, []), temporary_assigns: [messages: []]}
   end
+
+  defp broadcast!(room_code, event, message) do
+    Manga2getherWeb.Endpoint.broadcast!("room:#{room_code}", event, message)
+  end
+
+  def assign_user(socket, token) do
+    assign_new(socket, :current_user, fn ->
+      Accounts.get_user_by_session_token(token)
+    end)
+  end
+
+  ################################################################################
 
   @impl true
   def handle_info(%{event: "updated_users", payload: %{users: users}} = _message, socket) do
@@ -40,13 +54,29 @@ defmodule Manga2getherWeb.RoomLive.Show do
   end
 
   @impl true
+  def handle_info(%{event: "new_message", payload: payload} = _message, socket) do
+    socket =
+      socket
+      |> update(:messages, fn messages -> [payload | messages] end)
+
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_info(_message, socket) do
     {:noreply, socket}
   end
 
-  def assign_user(socket, token) do
-    assign_new(socket, :current_user, fn ->
-      Accounts.get_user_by_session_token(token)
-    end)
+  ################################################################################
+
+  @impl true
+  def handle_event("send_chat", %{"chat_message" => %{"message" => message}}, socket) do
+    broadcast!(socket.assigns.current_room.room_code, "new_message", %{
+      id: Ecto.UUID.generate(),
+      sender: socket.assigns.current_user.username,
+      message: message
+    })
+
+    {:noreply, socket}
   end
 end
