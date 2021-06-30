@@ -2,7 +2,6 @@ defmodule Manga2getherWeb.RoomLive.Show do
   use Manga2getherWeb, :live_view
 
   alias Manga2gether.Accounts
-  alias Manga2gether.Rooms
   alias Manga2gether.RoomServer
   alias Manga2gether.RoomUser
 
@@ -44,9 +43,6 @@ defmodule Manga2getherWeb.RoomLive.Show do
   def handle_info(_message, socket) do
     {:noreply, socket}
   end
-
-  defp page_title(:show), do: "Show Room"
-  defp page_title(:edit), do: "Edit Room"
 
   def assign_user(socket, token) do
     assign_new(socket, :current_user, fn ->
