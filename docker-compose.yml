@@ -1,0 +1,33 @@
+version: '3'
+services: 
+  db:
+    image: 'postgres:12'
+    environment: 
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: unless-stopped
+    volumes: 
+      - 'pgdata:/var/lib/postgresql/data'
+    ports: 
+      - 15432:5432
+  phoenix:
+    build:
+      context: .
+    depends_on: 
+      - db
+    environment: 
+      # MIX_ENV: dev
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: manga2gether_dev
+      PGPORT: 5432
+      PGHOST: db
+      # DATABASE_URL: postgres://postgres:postgres@db:5432/manga2gether_dev
+    # env_file: 
+    #   - .env
+    volumes: 
+      - .:/app
+    network_mode: service:db
+volumes: 
+  pgdata:
