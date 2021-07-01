@@ -50,19 +50,17 @@ defmodule Manga2getherWeb.RoomLive.Show do
 
   ################################################################################
 
+  ### Recieved from RoomServer/presence_diff event
   @impl true
   def handle_info(%{event: "updated_users", payload: %{users: users}} = _message, socket) do
-    IO.inspect(users)
-
     {:noreply,
      socket
      |> assign(:users, users)}
   end
 
+  ### Room user is told by owner to update their presence
   @impl true
-  def handle_info(%{event: "reset_ready", payload: _} = message, socket) do
-    IO.inspect(message)
-
+  def handle_info(%{event: "reset_ready", payload: _} = _message, socket) do
     Manga2getherWeb.Presence.update(
       self(),
       "room:#{socket.assigns.current_room.room_code}",
@@ -73,6 +71,7 @@ defmodule Manga2getherWeb.RoomLive.Show do
     {:noreply, socket}
   end
 
+  ### Room user gets chat message
   @impl true
   def handle_info(%{event: "new_message", payload: payload} = _message, socket) do
     socket =
@@ -89,6 +88,7 @@ defmodule Manga2getherWeb.RoomLive.Show do
 
   ################################################################################
 
+  ### Room user sends chat message
   @impl true
   def handle_event("send_chat", %{"chat_message" => %{"message" => message}}, socket) do
     broadcast!(socket.assigns.current_room.room_code, "new_message", %{
@@ -100,6 +100,7 @@ defmodule Manga2getherWeb.RoomLive.Show do
     {:noreply, socket}
   end
 
+  ### Room user clicks ready button
   @impl true
   def handle_event("ready", _params, socket) do
     # IO.inspect(params)
@@ -114,14 +115,10 @@ defmodule Manga2getherWeb.RoomLive.Show do
     {:noreply, socket}
   end
 
+  ### Owner tells room to update their presence
   @impl true
-  def handle_event("next_page", params, socket) do
-    IO.inspect(params)
-
-    users = Manga2getherWeb.Presence.reset_ready(socket.assigns.current_room.room_code)
-    broadcast!(socket.assigns.current_room.room_code, "reset_ready", "")
-
-    IO.inspect(users)
+  def handle_event("next_page", _params, socket) do
+    broadcast!(socket.assigns.current_room.room_code, "reset_ready", nil)
 
     {:noreply, socket}
   end

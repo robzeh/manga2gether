@@ -1,11 +1,11 @@
 <div class="w-screen h-screen bg-aaa flex flex-row">
   <div class="w-3/4 flex flex-col">
     <div class="">
-      <%= live_component Manga2getherWeb.RoomLive.ReaderComponent, reading: @current_room.reading %>
+      <%= live_component Manga2getherWeb.RoomLive.ReaderComponent, owner: @owner, reading: @current_room.reading %>
     </div>
 
     <%= if @owner do %>
-      <div class="bg-bb w-full h-1/10 p-2 flex justify-between">
+      <div class="bg-bb w-full h-1/10 p-2 flex justify-between border-t border-opacity-25 border-gray-200">
         <button>Prev</button>
         <button class="bg-ddd rounded p-1 px-6 text-white" phx-click="next_page" type="button">Next</button>
       </div>
