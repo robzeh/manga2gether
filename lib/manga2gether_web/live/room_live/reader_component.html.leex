@@ -1,0 +1,8 @@
+<div class="w-full h-9/10">
+  <%= case @reading do %>
+    <% true -> %>
+      <div>reading</div>
+    <% false -> %>
+      <div class="text-white">not reading</div>
+  <% end %>
+</div>

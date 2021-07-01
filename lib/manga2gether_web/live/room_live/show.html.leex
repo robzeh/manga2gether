@@ -1,48 +1,68 @@
 <div class="w-screen h-screen bg-aaa flex flex-row">
-  <div class="w-3/4">
-    room
+  <div class="w-3/4 flex flex-col">
+    <div class="">
+      <%= live_component Manga2getherWeb.RoomLive.ReaderComponent, reading: @current_room.reading %>
+    </div>
+
+    <%= if @owner do %>
+      <div class="bg-bb w-full h-1/10 p-2 flex justify-between">
+        <button>Prev</button>
+        <button class="bg-ddd rounded p-1 px-6 text-white" phx-click="next_page" type="button">Next</button>
+      </div>
+    <% end %>
   </div>
 
   <div class="bg-bb w-1/4 flex flex-col border-l border-opacity-25 border-gray-200">
-    <div class="h-1/2">
-      <div class="p-2 border-b border-opacity-25 border-gray-200">
-        <div class="bg-ddd p-2 text-white tracking-wide rounded-lg">
-          Readers
+    <div class="h-9/10">
+
+      <!-- Users-->
+      <div class="h-1/2">
+        <div class="p-2 border-b border-opacity-25 border-gray-200">
+          <div class="bg-ddd p-2 text-white tracking-wide rounded-lg">
+            Readers
+          </div>
         </div>
-      </div>
-      <div class="p-2">
-        <%= for user <- @current_room.users do %>
-          <p class="p-2 text-white"><%= user.username %></p>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="h-1/2 flex flex-col justify-between">
-
-      <div class="border-b border-t border-opacity-25 border-gray-200 p-2 text-white">
-        Chat
-      </div>
-
-      <div class="h-full overflow-y-auto">
-        <div id="chat_messages" phx-update="append" class="p-2">
-          <%= for message <- @messages do %>
-            <p id="<%= message.id %>" class="text-white">
-              <span><%= message.sender %>:</span> <%= message.message %>
-            </p>
+        <div class="p-2">
+          <%= for user <- @users do %>
+            <div class="flex justify-between items-center">
+              <p class="p-2 text-white"><%= user.username %></p>
+              <%= if user.ready do %>
+                <div class="bg-green-500 p-1 px-2 rounded-full h-4"></div>
+              <% end %>
+            </div>
           <% end %>
         </div>
       </div>
 
-      <div>
-        <%= f= form_for :chat_message, "#", phx_submit: "send_chat", class: "p-2" %>
-          <%= text_input f, :message, class: "w-full" %>
-          <div class="flex justify-between mt-2">
-            <button class="bg-coollavender px-2 rounded text-white">Ready</button>
-            <%= submit "Send", class: "bg-victoryblue text-white px-2 rounded" %>
+      <div class="h-1/2 flex flex-col">
+        <div class="border-b border-t border-opacity-25 border-gray-200 p-2 text-white">
+          Chat
+        </div>
+
+        <div class="overflow-y-auto">
+          <div id="chat_messages" phx-update="append" class="p-2">
+            <%= for message <- @messages do %>
+              <p id="<%= message.id %>" class="text-white">
+                <span><%= message.sender %>:</span> <%= message.message %>
+              </p>
+            <% end %>
           </div>
-        </form>
+        </div>
       </div>
+
     </div>
+
+    <div class="border-t border-opacity-25 border-gray-200 h-1/10 w-full">
+      <%= f= form_for :chat_message, "#", phx_submit: "send_chat", class: "p-2 w-full" %>
+        <%= text_input f, :message, class: "w-full" %>
+        <div class="flex justify-between mt-2">
+          <!-- TODO: diasble -->
+          <button class="bg-coollavender px-2 rounded text-white" phx-click="ready" type="button">Ready</button>
+          <%= submit "Send", class: "bg-victoryblue text-white px-2 rounded" %>
+        </div>
+      </form>
+    </div>
+
   </div>
 
 </div>

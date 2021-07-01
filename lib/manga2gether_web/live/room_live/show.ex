@@ -26,11 +26,15 @@ defmodule Manga2getherWeb.RoomLive.Show do
       )
     end
 
+    # TODO: redo
+    users = room_code |> String.to_integer() |> RoomServer.get_users()
+
     {:ok,
      socket
      |> assign(:current_room, room)
      |> assign(:current_user, user)
      |> assign(:owner, RoomServer.is_owner(room_code, user.id))
+     |> assign(:users, users.users)
      |> assign(:messages, []), temporary_assigns: [messages: []]}
   end
 
@@ -48,9 +52,25 @@ defmodule Manga2getherWeb.RoomLive.Show do
 
   @impl true
   def handle_info(%{event: "updated_users", payload: %{users: users}} = _message, socket) do
+    IO.inspect(users)
+
     {:noreply,
      socket
-     |> assign(:current_room, %{socket.assigns.current_room | users: users})}
+     |> assign(:users, users)}
+  end
+
+  @impl true
+  def handle_info(%{event: "reset_ready", payload: _} = message, socket) do
+    IO.inspect(message)
+
+    Manga2getherWeb.Presence.update(
+      self(),
+      "room:#{socket.assigns.current_room.room_code}",
+      socket.assigns.current_user.id,
+      RoomUser.new(%{username: socket.assigns.current_user.username, ready: false})
+    )
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -76,6 +96,32 @@ defmodule Manga2getherWeb.RoomLive.Show do
       sender: socket.assigns.current_user.username,
       message: message
     })
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("ready", _params, socket) do
+    # IO.inspect(params)
+
+    Manga2getherWeb.Presence.update(
+      self(),
+      "room:#{socket.assigns.current_room.room_code}",
+      socket.assigns.current_user.id,
+      RoomUser.new(%{username: socket.assigns.current_user.username, ready: true})
+    )
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("next_page", params, socket) do
+    IO.inspect(params)
+
+    users = Manga2getherWeb.Presence.reset_ready(socket.assigns.current_room.room_code)
+    broadcast!(socket.assigns.current_room.room_code, "reset_ready", "")
+
+    IO.inspect(users)
 
     {:noreply, socket}
   end
