@@ -50,7 +50,9 @@ defmodule Manga2gether.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:phx_gen_auth, "~> 0.7", only: [:dev], runtime: false},
       {:ueberauth, "~> 0.6"},
-      {:ueberauth_discord, "~> 0.6"}
+      {:ueberauth_discord, "~> 0.6"},
+      {:tesla, "~> 1.4.0"},
+      {:hackney, "~> 1.17.0"}
     ]
   end
 
