@@ -81,6 +81,28 @@ defmodule Manga2getherWeb.RoomLive.Show do
     {:noreply, socket}
   end
 
+  ### Room user is told to change reading status
+  @impl true
+  def handle_info(%{event: "reading_status", payload: %{reading: status}} = _message, socket) do
+    {:noreply,
+     socket
+     |> assign(:current_room, %{socket.assigns.current_room | reading: status})}
+  end
+
+  @impl true
+  def handle_info(%{event: "set_manga", payload: %{manga: new_manga}} = _message, socket) do
+    {:noreply,
+     socket
+     |> assign(:current_room, %{socket.assigns.current_room | manga: new_manga})}
+  end
+
+  @impl true
+  def handle_info(%{event: "next_manga_page", payload: %{manga: new_manga}} = _message, socket) do
+    {:noreply,
+     socket
+     |> assign(:current_room, %{socket.assigns.current_room | manga: new_manga})}
+  end
+
   @impl true
   def handle_info(_message, socket) do
     {:noreply, socket}
@@ -90,7 +112,7 @@ defmodule Manga2getherWeb.RoomLive.Show do
 
   ### Room user sends chat message
   @impl true
-  def handle_event("send_chat", %{"chat_message" => %{"message" => message}}, socket) do
+  def handle_event("send_chat", %{"chat_message" => %{"message" => message}} = _params, socket) do
     broadcast!(socket.assigns.current_room.room_code, "new_message", %{
       id: Ecto.UUID.generate(),
       sender: socket.assigns.current_user.username,
@@ -118,7 +140,10 @@ defmodule Manga2getherWeb.RoomLive.Show do
   ### Owner tells room to update their presence
   @impl true
   def handle_event("next_page", _params, socket) do
+    IO.inspect("CALLED")
     broadcast!(socket.assigns.current_room.room_code, "reset_ready", nil)
+    RoomServer.next_page(socket.assigns.current_room.room_code)
+    # tell reader component to change page
 
     {:noreply, socket}
   end

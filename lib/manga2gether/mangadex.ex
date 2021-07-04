@@ -45,6 +45,32 @@ defmodule Manga2gether.MangaDex do
     end
   end
 
+  @spec get_server_impl(String.t()) :: {:error, any} | {:ok, String.t()}
+  def get_server_impl(chapter_id) do
+    case get_server(chapter_id) do
+      {:ok, %Tesla.Env{status: 200, body: body}} ->
+        url =
+          body
+          |> parse_value("baseUrl")
+
+        {:ok, url}
+
+      {:ok, error} ->
+        {:error, error}
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
+
+  @spec construct_all_pages(String.t(), String.t(), String.t(), list(String.t())) ::
+          list(String.t())
+  def construct_all_pages(base_url, quality, hash, files) do
+    Enum.map(files, fn file ->
+      [base_url, "/", quality, "/", hash, "/", file]
+    end)
+  end
+
   ################################################################################
   ### HTTP Calls
 
@@ -54,6 +80,10 @@ defmodule Manga2gether.MangaDex do
 
   defp get_chapters(manga_id) do
     get("/chapter", query: [manga: manga_id, translatedLanguage: ["en"]])
+  end
+
+  defp get_server(chapter_id) do
+    get("/at-home/server/" <> chapter_id)
   end
 
   ################################################################################
@@ -67,7 +97,7 @@ defmodule Manga2gether.MangaDex do
       %{
         id: result["data"]["id"],
         title: result["data"]["attributes"]["title"]["en"],
-        description: result["data"]["attributes"]["description"],
+        description: result["data"]["attributes"]["description"]["en"],
         last_chapter: result["data"]["attributes"]["lastChapter"],
         updated_at: result["data"]["attributes"]["updatedAt"],
         last_volume: result["data"]["attributes"]["lastVolume"]
@@ -84,8 +114,8 @@ defmodule Manga2gether.MangaDex do
         chapter: result["data"]["attributes"]["chapter"],
         hash: result["data"]["attributes"]["hash"],
         data: result["data"]["attributes"]["data"],
-        dataSaver: result["data"]["attributes"]["dataSaver"],
-        publishAt: result["data"]["attributes"]["publishAt"]
+        data_saver: result["data"]["attributes"]["dataSaver"],
+        publish_at: result["data"]["attributes"]["publishAt"]
       }
     end)
   end

@@ -72,6 +72,11 @@ defmodule Manga2gether.RoomServer do
     cast(room_code, {:set_manga, manga})
   end
 
+  @spec next_page(integer()) :: :ok
+  def next_page(room_code) do
+    cast(room_code, {:next_page})
+  end
+
   @spec set_reading(integer(), boolean()) :: :ok
   def set_reading(room_code, status) do
     cast(room_code, {:set_reading, status})
@@ -94,7 +99,15 @@ defmodule Manga2gether.RoomServer do
   @impl true
   def handle_cast({:set_manga, manga}, state) do
     new_manga = MangaSession.new(manga)
-    # TODO: broadcast?
+    broadcast!(state.room_code, "set_manga", %{manga: new_manga})
+    {:noreply, %{state | manga: new_manga}}
+  end
+
+  @impl true
+  def handle_cast({:next_page}, state) do
+    IO.inspect("ROOMSERVER NEXTPAGE")
+    new_manga = MangaSession.next_page(state.manga)
+    broadcast!(state.room_code, "next_manga_page", %{manga: new_manga})
     {:noreply, %{state | manga: new_manga}}
   end
 
@@ -105,9 +118,8 @@ defmodule Manga2gether.RoomServer do
   end
 
   @impl true
-  def handle_info(%{event: "presence_diff"} = message, %{room_code: room_code} = state) do
+  def handle_info(%{event: "presence_diff"} = _message, %{room_code: room_code} = state) do
     users = Manga2getherWeb.Presence.list_users(room_code)
-    IO.inspect(users)
     broadcast!(room_code, "updated_users", %{users: users})
     {:noreply, %{state | users: users}}
   end
