@@ -51,11 +51,12 @@ defmodule Manga2getherWeb.RoomLive.ReaderComponent do
   end
 
   def handle_event("get_chapters", %{"id" => manga_id} = _params, socket) do
-    case MangaDex.get_chapters_impl(manga_id) do
+    case MangaDex.get_chapters_impl(manga_id, 0) do
       {:ok, results} ->
         {:noreply,
          socket
-         |> assign(:chapter_results, results)}
+         |> assign(:chapter_results, results)
+         |> assign(:manga_id, manga_id)}
 
       {:error, _} ->
         {:noreply, socket}
@@ -83,6 +84,18 @@ defmodule Manga2getherWeb.RoomLive.ReaderComponent do
      socket
      |> assign(:chapter_results, [])
      |> assign(:search_results, [])}
+  end
+
+  def handle_event("load_more", %{"id" => manga_id} = _params, socket) do
+    case MangaDex.get_chapters_impl(manga_id, length(socket.assigns.chapter_results)) do
+      {:ok, results} ->
+        {:noreply,
+         socket
+         |> assign(:chapter_results, socket.assigns.chapter_results ++ results)}
+
+      {:error, _} ->
+        {:noreply, socket}
+    end
   end
 
   # def handle_event("next_page", params, socket) do

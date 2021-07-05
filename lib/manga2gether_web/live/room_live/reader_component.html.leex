@@ -57,6 +57,11 @@
                     </div>
                   <% end %>
 
+                  <button class="bg-aaa my-2 p-4 rounded text-white hover:bg-victoryblue cursor-pointer"
+                    phx-click="load_more"
+                    phx-target="<%= @myself %>"
+                    phx-value-id="<%= @manga_id %>">Load more</button>
+
               <% end %>
 
             </div>

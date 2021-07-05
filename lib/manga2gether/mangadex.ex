@@ -26,9 +26,9 @@ defmodule Manga2gether.MangaDex do
     end
   end
 
-  @spec get_chapters_impl(String.t()) :: {:error, any} | {:ok, list(map())}
-  def get_chapters_impl(manga_id) do
-    case get_chapters(manga_id) do
+  @spec get_chapters_impl(String.t(), integer()) :: {:error, any} | {:ok, list(map())}
+  def get_chapters_impl(manga_id, offset \\ 0) do
+    case get_chapters(manga_id, offset) do
       {:ok, %Tesla.Env{status: 200, body: body}} ->
         results =
           body
@@ -78,8 +78,15 @@ defmodule Manga2gether.MangaDex do
     get("/manga", query: [title: title, limit: limit])
   end
 
-  defp get_chapters(manga_id) do
-    get("/chapter", query: [manga: manga_id, translatedLanguage: ["en"]])
+  defp get_chapters(manga_id, offset) do
+    get("/chapter",
+      query: [
+        manga: manga_id,
+        translatedLanguage: ["en"],
+        order: [chapter: "desc"],
+        offset: offset
+      ]
+    )
   end
 
   defp get_server(chapter_id) do

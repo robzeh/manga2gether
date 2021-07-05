@@ -147,4 +147,14 @@ defmodule Manga2getherWeb.RoomLive.Show do
 
     {:noreply, socket}
   end
+
+  ### Owner changes room status to searching
+  @impl true
+  def handle_event("show_search", params, socket) do
+    IO.inspect(params)
+    # reset room server manga session
+    # broadcast room reading state change
+    RoomServer.set_reading(socket.assigns.current_room.room_code, false)
+    {:noreply, socket}
+  end
 end
