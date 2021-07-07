@@ -11,13 +11,20 @@
         chapter_results: [] %>
     </div>
 
-    <%= if @owner do %>
-      <div class="bg-bb w-full h-1/10 p-2 flex justify-between border-t border-opacity-25 border-gray-200">
-        <button class="bg-ddd rounded p-1 px-6 text-white" phx-click="prev_page" type="button">Prev</button>
-        <button class="bg-ddd rounded p-1 px-6 text-white" phx-click="show_search" type="button">Search</button>
-        <!-- Send next_page event to reader_component and this liveview  phx-target="#reader_component, #room"  -->
-        <button class="bg-ddd rounded p-1 px-6 text-white" phx-click="next_page" type="button">Next</button>
-      </div>
+    <%= case @owner do %>
+      <% true -> %>
+        <div class="bg-bb w-full h-1/10 p-2 flex justify-between content-center border-t border-opacity-25 border-gray-200">
+          <button class="bg-ddd rounded p-1 px-6 text-white" phx-click="prev_page" type="button">Prev</button>
+          <button class="bg-ddd rounded p-1 px-6 text-white" phx-click="show_search" type="button">Search</button>
+          <!-- Send next_page event to reader_component and this liveview  phx-target="#reader_component, #room"  -->
+          <button class="bg-ddd rounded p-1 px-6 text-white" phx-click="next_page" type="button">Next</button>
+        </div>
+      <% false -> %>
+        <%= if @current_room.reading do %>
+          <div class="bg-bb w-full h-1/10 p-2 flex justify-center content-center border-t border-opacity-25 border-gray-200">
+            <div class="text-white m-auto"><%= @current_room.manga.current_idx + 1 %>/<%= length(@current_room.manga.pages) %></div>
+          </div>
+        <% end %>
     <% end %>
   </div>
 
@@ -26,10 +33,8 @@
 
       <!-- Users-->
       <div class="h-1/2">
-        <div class="p-2 border-b border-opacity-25 border-gray-200">
-          <div class="bg-ddd p-2 text-white tracking-wide rounded-lg">
-            Readers
-          </div>
+        <div class="p-2 border-b border-opacity-25 border-gray-200 text-white">
+          Readers
         </div>
         <div class="p-2">
           <%= for user <- @users do %>

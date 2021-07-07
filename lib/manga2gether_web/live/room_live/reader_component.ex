@@ -4,22 +4,6 @@ defmodule Manga2getherWeb.RoomLive.ReaderComponent do
   alias Manga2gether.MangaDex
   alias Manga2gether.RoomServer
 
-  def preload(list_of_assigns) do
-    IO.inspect(list_of_assigns)
-
-    Enum.map(list_of_assigns, fn assigns ->
-      IO.inspect(assigns.room_code)
-      Map.put(assigns, :room_code, assigns.room_code)
-    end)
-  end
-
-  def mount(socket) do
-    IO.inspect(socket.assigns)
-    {:ok, socket}
-  end
-
-  ################################################################################
-
   def handle_event("search_manga", %{"search_manga" => %{"query" => query}} = _params, socket) do
     case MangaDex.search_manga(query) do
       {:ok, results} ->
@@ -78,17 +62,6 @@ defmodule Manga2getherWeb.RoomLive.ReaderComponent do
       {:error, _} ->
         {:noreply, socket}
     end
-  end
-
-  # def handle_event("next_page", params, socket) do
-  #   IO.inspect("params")
-  #   IO.inspect(params)
-  #   {:noreply, socket}
-  # end
-
-  def update(assigns, socket) do
-    IO.inspect(socket)
-    {:ok, assign(socket, assigns)}
   end
 
   defp get_chapter_in_assigns(chapter_id, socket) do

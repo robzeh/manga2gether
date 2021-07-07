@@ -32,11 +32,15 @@ defmodule Manga2gether.MangaSession do
 
   @spec prev_page(t()) :: t()
   def prev_page(manga) do
-    if manga.current_idx - 1 > 0,
-      do: %{
+    if manga.current_idx - 1 >= 0 do
+      %{
         manga
         | current_idx: manga.current_idx - 1,
           current_page: Enum.at(manga.pages, manga.current_idx - 1)
       }
+    else
+      # Leave chapter as be, remains on first page
+      manga
+    end
   end
 end
