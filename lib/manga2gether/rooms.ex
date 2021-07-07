@@ -18,7 +18,12 @@ defmodule Manga2gether.Rooms do
 
   """
   def list_rooms do
-    Repo.all(Room)
+    public_rooms =
+      from r in Room,
+        select: r,
+        where: r.private == false
+
+    Repo.all(public_rooms)
     |> Repo.preload(:user)
   end
 

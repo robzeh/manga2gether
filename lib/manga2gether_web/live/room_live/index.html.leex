@@ -17,7 +17,7 @@
 		  <div phx-click="join_room" phx-value-code="<%= room.room_code %>" class="w-full bg-gray-500 rounded p-2 flex flex-col">
 				<div class="flex justify-between">
 			  	<p class="text-lg text-white inline"><%= room.name %></p>
-					<p>10</p>
+					<p><%= room.num_ppl %> </p>
 				</div>
 				<div class="flex justify-between">
 			  	<p class="text-md text-white inline"><%= room.description %></p>

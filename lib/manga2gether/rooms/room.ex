@@ -9,7 +9,9 @@ defmodule Manga2gether.Rooms.Room do
     field :description, :string
     field :name, :string
     field :room_code, :integer
-    # field :owner_id, :binary_id, foreign_key: :owner_id
+    field :current_manga, :string
+    field :num_ppl, :integer
+    field :private, :boolean
 
     belongs_to :user, Manga2gether.Accounts.User,
       references: :id,
@@ -21,7 +23,7 @@ defmodule Manga2gether.Rooms.Room do
   @doc false
   def changeset(room, attrs) do
     room
-    |> cast(attrs, [:name, :description, :room_code, :owner_id])
+    |> cast(attrs, [:name, :description, :room_code, :owner_id, :private])
     |> validate_required([:name, :description, :room_code, :owner_id])
     |> unique_constraint(:owner_id)
     |> unique_constraint(:room_code)
