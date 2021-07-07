@@ -23,7 +23,7 @@ defmodule Manga2gether.Rooms.Room do
   @doc false
   def changeset(room, attrs) do
     room
-    |> cast(attrs, [:name, :description, :room_code, :owner_id, :private])
+    |> cast(attrs, [:name, :description, :room_code, :owner_id, :private, :num_ppl])
     |> validate_required([:name, :description, :room_code, :owner_id])
     |> unique_constraint(:owner_id)
     |> unique_constraint(:room_code)

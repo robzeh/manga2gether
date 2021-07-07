@@ -15,6 +15,8 @@ defmodule Manga2getherWeb.Presence do
     end
   end
 
+  def room_size(room_code), do: map_size(Presence.list("room:#{room_code}"))
+
   @spec list_keys(integer()) :: list
   def list_keys(room_code) do
     Presence.list("room:#{room_code}")

@@ -2,6 +2,7 @@ defmodule Manga2gether.RoomServer do
   use GenServer
 
   alias Manga2gether.MangaSession
+  alias Manga2gether.Rooms
   alias Manga2gether.RoomSession
 
   ################################################################################
@@ -51,6 +52,7 @@ defmodule Manga2gether.RoomServer do
     |> Map.get(:owner_id) == user_id
   end
 
+  @spec broadcast!(integer(), String.t(), map()) :: :ok
   defp broadcast!(room_code, event, message) do
     Manga2getherWeb.Endpoint.broadcast!("room:#{room_code}", event, message)
   end
@@ -129,8 +131,24 @@ defmodule Manga2gether.RoomServer do
   end
 
   @impl true
-  def handle_info(%{event: "presence_diff"} = _message, %{room_code: room_code} = state) do
+  def handle_info(
+        %{event: "presence_diff"} = _message,
+        %{room_code: room_code, users: room_users} = state
+      ) do
+    # Get list and size of present users
     users = Manga2getherWeb.Presence.list_users(room_code)
+    num_ppl = Manga2getherWeb.Presence.room_size(room_code)
+
+    # Num ppl in room changed, update room in db
+    if length(room_users) != num_ppl do
+      room = Rooms.get_room!(room_code)
+      {:ok, _} = Rooms.update_room(room, %{num_ppl: num_ppl})
+      # Update user count of room on homepage
+      updated_rooms = Rooms.list_rooms()
+      Manga2getherWeb.Endpoint.broadcast!("rooms", "new_room", %{rooms: updated_rooms})
+    end
+
+    # Updated users for ppl in room
     broadcast!(room_code, "updated_users", %{users: users})
     {:noreply, %{state | users: users}}
   end
