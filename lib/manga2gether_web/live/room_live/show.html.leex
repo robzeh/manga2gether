@@ -39,7 +39,7 @@
         <div class="p-2">
           <%= for user <- @users do %>
             <div class="flex justify-between items-center">
-              <p class="p-2 text-white"><%= user.username %></p>
+              <p class="p-2 text-white text-<%= user.color %>-500 "><%= user.username %></p>
               <%= if user.ready do %>
                 <div class="bg-green-500 p-1 px-2 rounded-full h-4"></div>
               <% end %>
@@ -57,7 +57,7 @@
           <div id="chat_messages" phx-update="append" class="p-2">
             <%= for message <- @messages do %>
               <p id="<%= message.id %>" class="text-white">
-                <span><%= message.sender %>:</span> <%= message.message %>
+                <span class="text-<%= message.color %>-500"><%= message.sender %>:</span> <%= message.message %>
               </p>
             <% end %>
           </div>

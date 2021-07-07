@@ -13,9 +13,10 @@ defmodule Manga2getherWeb.RoomLive.Show do
       ) do
     user = assign_user(socket, session_token) |> Map.get(:assigns) |> Map.get(:current_user)
     room = RoomServer.get_room(String.to_integer(room_code))
+    color = RoomUser.assign_color()
 
     if connected?(socket) do
-      room_user = RoomUser.new(%{username: user.username})
+      room_user = RoomUser.new(%{username: user.username, color: color})
       Manga2getherWeb.Endpoint.subscribe("room:#{room_code}")
 
       Manga2getherWeb.Presence.track(
@@ -33,6 +34,7 @@ defmodule Manga2getherWeb.RoomLive.Show do
      socket
      |> assign(:current_room, room)
      |> assign(:current_user, user)
+     |> assign(:color, color)
      |> assign(:owner, RoomServer.is_owner(room_code, user.id))
      |> assign(:users, users.users)
      |> assign(:messages, []), temporary_assigns: [messages: []]}
@@ -65,7 +67,11 @@ defmodule Manga2getherWeb.RoomLive.Show do
       self(),
       "room:#{socket.assigns.current_room.room_code}",
       socket.assigns.current_user.id,
-      RoomUser.new(%{username: socket.assigns.current_user.username, ready: false})
+      RoomUser.new(%{
+        username: socket.assigns.current_user.username,
+        color: socket.assigns.color,
+        ready: false
+      })
     )
 
     {:noreply, socket}
@@ -116,6 +122,7 @@ defmodule Manga2getherWeb.RoomLive.Show do
     broadcast!(socket.assigns.current_room.room_code, "new_message", %{
       id: Ecto.UUID.generate(),
       sender: socket.assigns.current_user.username,
+      color: socket.assigns.color,
       message: message
     })
 
@@ -131,7 +138,11 @@ defmodule Manga2getherWeb.RoomLive.Show do
       self(),
       "room:#{socket.assigns.current_room.room_code}",
       socket.assigns.current_user.id,
-      RoomUser.new(%{username: socket.assigns.current_user.username, ready: true})
+      RoomUser.new(%{
+        username: socket.assigns.current_user.username,
+        color: socket.assigns.color,
+        ready: true
+      })
     )
 
     {:noreply, socket}
