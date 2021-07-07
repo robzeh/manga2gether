@@ -1,8 +1,14 @@
 <div id="<%= @id %>" class="w-full h-9/10 flex">
   <%= case @reading do %>
     <% true -> %>
-      <div class="h-full w-full">
-        <img src="<%= @manga.current_page %>" alt="page" style="height: 100%; width: 100%; object-fit: contain">
+      <div class="h-full w-full flex items-center">
+        <%= cond do %>
+          <% @manga.current_page -> %>
+            <img src="<%= @manga.current_page %>" alt="page" style="height: 100%; width: 100%; object-fit: contain">
+          <!-- When reach end of chapter, set current page to nil -->
+          <% true -> %>
+            <h2 class="text-white m-auto p-2">You have reached the end of the chapter</h2>
+        <% end %>
       </div>
     <% false -> %>
       <%= case @owner do %>

@@ -77,6 +77,11 @@ defmodule Manga2gether.RoomServer do
     cast(room_code, {:next_page})
   end
 
+  @spec prev_page(integer()) :: :ok
+  def prev_page(room_code) do
+    cast(room_code, {:prev_page})
+  end
+
   @spec set_reading(integer(), boolean()) :: :ok
   def set_reading(room_code, status) do
     cast(room_code, {:set_reading, status})
@@ -105,9 +110,15 @@ defmodule Manga2gether.RoomServer do
 
   @impl true
   def handle_cast({:next_page}, state) do
-    IO.inspect("ROOMSERVER NEXTPAGE")
     new_manga = MangaSession.next_page(state.manga)
-    broadcast!(state.room_code, "next_manga_page", %{manga: new_manga})
+    broadcast!(state.room_code, "new_manga_page", %{manga: new_manga})
+    {:noreply, %{state | manga: new_manga}}
+  end
+
+  @impl true
+  def handle_cast({:prev_page}, state) do
+    new_manga = MangaSession.prev_page(state.manga)
+    broadcast!(state.room_code, "new_manga_page", %{manga: new_manga})
     {:noreply, %{state | manga: new_manga}}
   end
 

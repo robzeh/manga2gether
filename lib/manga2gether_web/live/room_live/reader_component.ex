@@ -20,24 +20,6 @@ defmodule Manga2getherWeb.RoomLive.ReaderComponent do
 
   ################################################################################
 
-  def handle_info(%{event: "set_manga", payload: %{manga: new_manga}} = _message, socket) do
-    IO.inspect(new_manga)
-
-    {:noreply,
-     socket
-     |> assign(:manga, new_manga)}
-  end
-
-  def handle_info(%{event: "next_manga_page", payload: %{manga: new_manga}} = _message, socket) do
-    IO.inspect(new_manga)
-
-    {:noreply,
-     socket
-     |> assign(:current_page, new_manga.current_page)}
-  end
-
-  ################################################################################
-
   def handle_event("search_manga", %{"search_manga" => %{"query" => query}} = _params, socket) do
     case MangaDex.search_manga(query) do
       {:ok, results} ->

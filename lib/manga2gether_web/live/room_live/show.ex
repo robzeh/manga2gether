@@ -97,7 +97,7 @@ defmodule Manga2getherWeb.RoomLive.Show do
   end
 
   @impl true
-  def handle_info(%{event: "next_manga_page", payload: %{manga: new_manga}} = _message, socket) do
+  def handle_info(%{event: "new_manga_page", payload: %{manga: new_manga}} = _message, socket) do
     {:noreply,
      socket
      |> assign(:current_room, %{socket.assigns.current_room | manga: new_manga})}
@@ -137,10 +137,9 @@ defmodule Manga2getherWeb.RoomLive.Show do
     {:noreply, socket}
   end
 
-  ### Owner tells room to update their presence
+  ### Owner changes page and tells room to update their presence
   @impl true
   def handle_event("next_page", _params, socket) do
-    IO.inspect("CALLED")
     broadcast!(socket.assigns.current_room.room_code, "reset_ready", nil)
     RoomServer.next_page(socket.assigns.current_room.room_code)
     # tell reader component to change page
@@ -148,10 +147,17 @@ defmodule Manga2getherWeb.RoomLive.Show do
     {:noreply, socket}
   end
 
+  ### Owner changes page and tells room to update their presence
+  @impl true
+  def handle_event("prev_page", _params, socket) do
+    broadcast!(socket.assigns.current_room.room_code, "reset_ready", nil)
+    RoomServer.prev_page(socket.assigns.current_room.room_code)
+    {:noreply, socket}
+  end
+
   ### Owner changes room status to searching
   @impl true
-  def handle_event("show_search", params, socket) do
-    IO.inspect(params)
+  def handle_event("show_search", _params, socket) do
     # reset room server manga session
     # broadcast room reading state change
     RoomServer.set_reading(socket.assigns.current_room.room_code, false)
