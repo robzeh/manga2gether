@@ -1,6 +1,4 @@
-<div class="w-screen h-screen bg-gray-800 flex flex-col items-center">
-  <div class="bg-purple-600 hover:bg-purple-500 text-xl text-white p-2 m-2 rounded"><%= live_patch "Create a Room", to: Routes.room_index_path(@socket, :new) %></div>
-  <h1 class="text-white text-center text-3xl">Listing Rooms</h1>
+<div class="w-screen h-screen bg-gray-800 flex">
 
   <%= if @live_action in [:new, :edit] do %>
     <%= live_modal @socket, Manga2getherWeb.RoomLive.FormComponent,
@@ -12,51 +10,34 @@
       return_to: Routes.room_index_path(@socket, :index) %>
   <% end %>
 
-	<div class="w-1/2 m-2">
-	  <%= for room <- @rooms do %>
-		  <div phx-click="join_room" phx-value-code="<%= room.room_code %>" class="w-full bg-gray-500 rounded p-2 flex flex-col">
-				<div class="flex justify-between">
-			  	<p class="text-lg text-white inline"><%= room.name %></p>
-					<p><%= room.num_ppl %> </p>
-				</div>
-				<div class="flex justify-between">
-			  	<p class="text-md text-white inline"><%= room.description %></p>
-					<p><%= room.user.username %></p>
-				</div>
-        <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: room.room_code, data: [confirm: "Are you sure?"] %></span>
-			</div>
-		<% end %>
-	</div>
+  <div class="w-11/12 h-full">
+    <div class="w-full">
+      <%= f = form_for :home_search, "#", class: "p-2 w-full" %>
+        <%= text_input f, :query, class: "w-full rounded px-2 py-1", placeholder: "Search a room code, manga, room owner..." %>
+      </form>
+    </div>
 
-<!--
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Room code</th>
-        <th>Owner</th>
+    <div class="w-full flex justify-between p-2">
+      <h2 class="text-3xl text-white font-bold p-2">Top Rooms</h2>
+      <div class="w-2/5 bg-purple-600 hover:bg-purple-500 text-xl text-white text-center p-2 m-2 rounded"><%= live_patch "Create a Room", to: Routes.room_index_path(@socket, :new) %></div>
+    </div>
 
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="rooms">
-      <%= for room <- @rooms do %>
-        <tr id="room-<%= room.id %>">
-          <td><%= room.name %></td>
-          <td><%= room.description %></td>
-          <td><%= room.room_code %></td>
-          <td><%= room.user.username %></td>
+	  <div class="h-4/5 w-full m-2 p-5 overflow-y-auto scrollbar-thin scrollbar-thumb-coollavender scrollbar-track-bbb">
+	    <%= for room <- @rooms do %>
+	  	  <div phx-click="join_room" phx-value-code="<%= room.room_code %>" class="w-full bg-gray-500 hover:bg-gray-400 rounded p-2 flex flex-col my-2">
+	  			<div class="flex justify-between">
+	  		  	<p class="text-lg text-white inline"><%= room.name %></p>
+	  				<p><%= room.num_ppl %> </p>
+	  			</div>
+	  			<div class="flex justify-between">
+	  		  	<p class="text-md text-white inline"><%= room.description %></p>
+	  				<p><%= room.user.username %></p>
+	  			</div>
+         <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: room.room_code, data: [confirm: "Are you sure?"] %></span>
+	  		</div>
+	  	<% end %>
+	  </div>
 
-          <td>
-            <span><%= live_redirect "Show", to: Routes.room_show_path(@socket, :show, room) %></span>
-            <span><%= live_patch "Edit", to: Routes.room_index_path(@socket, :edit, room) %></span>
-            <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: room.id, data: [confirm: "Are you sure?"] %></span>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-	-->
+   </div>
 
 </div>

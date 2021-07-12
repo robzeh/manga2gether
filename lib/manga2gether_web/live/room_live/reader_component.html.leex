@@ -16,7 +16,7 @@
           <div class="bg-ccc m-auto p-2 w-4/5 h-4/5 rounded flex flex-col items-center">
             <h2 class="text-3xl text-white font-bold p-2">Search for a manga</h2>
 
-            <%= f= form_for :search_manga, "#", phx_submit: "search_manga", phx_target: @myself, class: "p-2 w-full flex justify-center" %>
+            <%= f = form_for :search_manga, "#", phx_submit: "search_manga", phx_target: @myself, class: "p-2 w-full flex justify-center" %>
               <%= text_input f, :query, class: "w-2/3 rounded px-2 py-1 mx-1", placeholder: "Search MangaDex..." %>
               <%= submit "Search", class: "bg-victoryblue text-white px-2 mx-1 rounded" %>
             </form>

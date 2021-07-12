@@ -48,7 +48,7 @@ defmodule Manga2gether.Application do
 
   # Start room servers for rooms already in database
   defp start_rooms() do
-    Enum.each(Manga2gether.Rooms.list_rooms(), fn room ->
+    Enum.each(Manga2gether.Rooms.all_rooms(), fn room ->
       Manga2gether.RoomSupervisor.start_room(%{
         room_id: room.id,
         room_code: room.room_code,

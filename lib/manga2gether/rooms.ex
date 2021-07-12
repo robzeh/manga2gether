@@ -9,7 +9,7 @@ defmodule Manga2gether.Rooms do
   alias Manga2gether.Rooms.Room
 
   @doc """
-  Returns the list of rooms.
+  Returns list of public rooms.
 
   ## Examples
 
@@ -21,9 +21,15 @@ defmodule Manga2gether.Rooms do
     public_rooms =
       from r in Room,
         select: r,
-        where: r.private == false
+        where: r.private == false,
+        order_by: [desc: r.num_ppl]
 
     Repo.all(public_rooms)
+    |> Repo.preload(:user)
+  end
+
+  def all_rooms do
+    Repo.all(Room)
     |> Repo.preload(:user)
   end
 
