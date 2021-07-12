@@ -8,6 +8,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      width: {
+        "48%": "48%"
+      },
       height: {
         "9/10": "calc(calc(100vh / 10) * 9)",
         "1/10": "calc(100vh / 10)"

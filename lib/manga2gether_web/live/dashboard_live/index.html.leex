@@ -1,0 +1,55 @@
+<div class="w-screen h-screen bg-gray-800 flex p-5">
+
+  <%= if @live_action in [:new, :edit] do %>
+    <%= live_modal @socket, Manga2getherWeb.RoomLive.FormComponent,
+      id: @room.id || :new,
+      title: @page_title,
+      action: @live_action,
+      room: @room,
+			current_user: @current_user,
+      return_to: Routes.dashboard_index_path(@socket, :index) %>
+  <% end %>
+
+  <div class="w-3/4 h-full">
+    <%= live_component Manga2getherWeb.DashboardLive.SearchComponent, id: "home_search_component", query: nil, results: [] %>
+
+    <div class="w-full flex justify-between p-2">
+      <h2 class="text-3xl text-white font-bold p-2">Top Rooms</h2>
+      <div class="w-2/5 bg-purple-600 hover:bg-purple-500 text-xl text-white text-center p-2 m-2 rounded"><%= live_patch "Create a Room", to: Routes.dashboard_index_path(@socket, :new) %></div>
+    </div>
+
+	  <div class="h-4/5 w-full overflow-y-auto scrollbar-thin scrollbar-thumb-coollavender scrollbar-track-bbb flex flex-wrap justify-between">
+	    <%= for room <- @rooms do %>
+	  	  <div phx-click="join_room" phx-value-code="<%= room.room_code %>" class="w-48% bg-gray-500 hover:bg-gray-400 rounded mx-2 p-2 flex flex-col my-2">
+	  			<div class="flex justify-between">
+	  		  	<p class=" text-lg font-bold text-white inline"><%= room.name %></p>
+            <div class="flex items-center">
+              <div class="bg-purple-500 p-2 px-2 rounded-full h-4 mr-1"></div>
+	  				  <p class="text-white font-bold"><%= room.num_ppl %> </p>
+            </div>
+	  			</div>
+	  			<div class="flex justify-between">
+	  		  	<p class="font-light text-white inline"><%= room.description %></p>
+	  				<p><%= room.user.username %></p>
+	  			</div>
+
+          <!--
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: room.room_code, data: [confirm: "Are you sure?"] %></span>
+          -->
+	  		</div>
+	  	<% end %>
+	  </div>
+
+   </div>
+
+  <div class="w-1/4 h-full flex flex-col px-2 py-4">
+    <div class="h-1/5 bg-bbb rounded text-white font-bold text-2xl p-2">
+      robzeh
+    </div>
+
+    <div class="h-4/5 bg-bbb rounded text-white font-bold text-2xl p-2 mt-4">
+      Friends
+    </div>
+  </div>
+
+</div>

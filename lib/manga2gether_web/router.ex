@@ -22,9 +22,9 @@ defmodule Manga2getherWeb.Router do
 
     # live "/", PageLive, :index
 
-    live "/", RoomLive.Index, :index
-    live "/room/new", RoomLive.Index, :new
-    live "/room/:id/edit", RoomLive.Index, :edit
+    live "/", DashboardLive.Index, :index
+    live "/room/new", DashboardLive.Index, :new
+    live "/room/:id/edit", DashboardLive.Index, :edit
 
     live "/room/:room_code", RoomLive.Show, :show
     live "/room/:id/show/edit", RoomLive.Show, :edit

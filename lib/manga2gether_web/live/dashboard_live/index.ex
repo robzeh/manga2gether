@@ -1,4 +1,4 @@
-defmodule Manga2getherWeb.RoomLive.Index do
+defmodule Manga2getherWeb.DashboardLive.Index do
   use Manga2getherWeb, :live_view
 
   alias Manga2gether.Accounts
