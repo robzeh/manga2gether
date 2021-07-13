@@ -11,7 +11,7 @@
   <% end %>
 
   <div class="w-3/4 h-full">
-    <%= live_component Manga2getherWeb.DashboardLive.SearchComponent, id: "home_search_component", query: nil, results: [] %>
+    <%= live_component Manga2getherWeb.DashboardLive.SearchComponent, id: "home_search_component", query: nil, rooms: @rooms, results: [] %>
 
     <div class="w-full flex justify-between p-2">
       <h2 class="text-3xl text-white font-bold p-2">Top Rooms</h2>
@@ -20,7 +20,7 @@
 
 	  <div class="h-4/5 w-full overflow-y-auto scrollbar-thin scrollbar-thumb-coollavender scrollbar-track-bbb flex flex-wrap justify-between">
 	    <%= for room <- @rooms do %>
-	  	  <div phx-click="join_room" phx-value-code="<%= room.room_code %>" class="w-48% bg-gray-500 hover:bg-gray-400 rounded mx-2 p-2 flex flex-col my-2">
+	  	  <div phx-click="join_room" phx-value-code="<%= room.room_code %>" class="w-48% bg-gray-500 hover:bg-gray-400 cursor-pointer rounded mx-2 p-2 flex flex-col my-2">
 	  			<div class="flex justify-between">
 	  		  	<p class=" text-lg font-bold text-white inline"><%= room.name %></p>
             <div class="flex items-center">
@@ -30,7 +30,7 @@
 	  			</div>
 	  			<div class="flex justify-between">
 	  		  	<p class="font-light text-white inline"><%= room.description %></p>
-	  				<p><%= room.user.username %></p>
+	  				<p class="font-bold text-white inline"><%= room.user.username %></p>
 	  			</div>
 
           <!--

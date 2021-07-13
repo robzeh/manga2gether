@@ -5,9 +5,31 @@
   <%= case @query do %>
     <% true -> %>
       <div class="absolute left-1/2 w-2/3">
-        <div class="relative -left-1/2 bg-coollavender w-full">
-          Results
-        </div>
+        <div class="relative -left-1/2 bg-coollavender w-full p-2 rounded shadow">
+          <%= cond do %>
+            <% length(@results) >= 1 -> %>
+              <%= for result <- @results do %>
+                <div phx-click="join_room" phx-value-code="<%= result.room_code %>" class="bg-aaa cursor-pointer hover:bg-gray-500 p-2 m-2 rounded flex flex-col">
+                  <div class="flex justify-between">
+                    <p class="text-lg font-bold text-white inline"><%= result.name %></p>
+                    <div class="flex items-center">
+                      <div class="bg-purple-500 p-2 px-2 rounded-full h-4 mr-1"></div>
+	  			            <p class="text-white font-bold"><%= result.num_ppl %> </p>
+                    </div>
+                  </div>
+                  <div class="flex justify-between">
+	  		  	        <p class="font-light text-white inline"><%= result.description %></p>
+	  				        <p class="font-bold text-white inline"><%= result.user.username %></p>
+                  </div>
+                </div>
+              <% end %>
+
+            <% true -> %>
+              <div class="text-white font-bold text-xl">
+                No Rooms Found
+              </div>
+          <% end %>
+          </div>
       </div>
     <% nil -> %>
       <div class="hidden"></div>
