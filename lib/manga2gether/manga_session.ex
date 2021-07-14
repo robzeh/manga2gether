@@ -1,10 +1,12 @@
 defmodule Manga2gether.MangaSession do
-  defstruct title: nil,
+  defstruct manga_title: nil,
+            title: nil,
             pages: [],
             current_idx: 0,
             current_page: nil
 
   @type t :: %__MODULE__{
+          manga_title: String.t(),
           title: String.t(),
           pages: list(String.t()),
           current_idx: integer(),

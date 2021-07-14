@@ -21,6 +21,14 @@
 	  		  	        <p class="font-light text-white inline"><%= result.description %></p>
 	  				        <p class="font-bold text-white inline"><%= result.user.username %></p>
                   </div>
+
+                  <%= cond do %>
+                    <% result.current_manga != nil -> %>
+                      <p class="font-light text-white">Reading: <span class="font-bold"><%= result.current_manga %></span></p>
+                    <% true -> %>
+                      <p class="hidden"></p>
+                  <% end %>
+
                 </div>
               <% end %>
 

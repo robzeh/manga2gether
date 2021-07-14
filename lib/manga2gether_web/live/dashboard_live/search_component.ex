@@ -15,7 +15,12 @@ defmodule Manga2getherWeb.DashboardLive.SearchComponent do
       Enum.filter(
         socket.assigns.rooms,
         fn room ->
-          current_manga = if room.current_manga == nil, do: ""
+          current_manga =
+            if room.current_manga == nil do
+              ""
+            else
+              room.current_manga
+            end
 
           # show room if name, owners name, current manga or room code contain query value
           String.downcase(room.name) =~ String.downcase(query) ||
@@ -24,8 +29,6 @@ defmodule Manga2getherWeb.DashboardLive.SearchComponent do
             Integer.to_string(room.room_code) == String.downcase(query)
         end
       )
-
-    IO.inspect(filtered_results)
 
     {:noreply,
      socket

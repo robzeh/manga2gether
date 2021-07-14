@@ -18,9 +18,9 @@
       <div class="w-2/5 bg-purple-600 hover:bg-purple-500 text-xl text-white text-center p-2 m-2 rounded"><%= live_patch "Create a Room", to: Routes.dashboard_index_path(@socket, :new) %></div>
     </div>
 
-	  <div class="h-4/5 w-full overflow-y-auto scrollbar-thin scrollbar-thumb-coollavender scrollbar-track-bbb flex flex-wrap justify-between">
+	  <div class="w-full h-4/5 overflow-y-auto scrollbar-thin scrollbar-thumb-coollavender scrollbar-track-bbb flex flex-wrap justify-between">
 	    <%= for room <- @rooms do %>
-	  	  <div phx-click="join_room" phx-value-code="<%= room.room_code %>" class="w-48% bg-gray-500 hover:bg-gray-400 cursor-pointer rounded mx-2 p-2 flex flex-col my-2">
+	  	  <div phx-click="join_room" phx-value-code="<%= room.room_code %>" class="w-48% h-1/5 bg-gray-500 hover:bg-gray-400 cursor-pointer flex flex-col rounded mx-2 p-2  my-2">
 	  			<div class="flex justify-between">
 	  		  	<p class=" text-lg font-bold text-white inline"><%= room.name %></p>
             <div class="flex items-center">
@@ -33,14 +33,18 @@
 	  				<p class="font-bold text-white inline"><%= room.user.username %></p>
 	  			</div>
 
-          <!--
-          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: room.room_code, data: [confirm: "Are you sure?"] %></span>
-          -->
+          <%= cond do %>
+            <% room.current_manga != nil -> %>
+              <p class="font-light text-white">Reading: <span class="font-bold"><%= room.current_manga %></span></p>
+            <% true -> %>
+              <p class="hidden"></p>
+          <% end %>
+
 	  		</div>
 	  	<% end %>
 	  </div>
 
-   </div>
+  </div>
 
   <div class="w-1/4 h-full flex flex-col px-2 py-4">
     <div class="h-1/5 bg-bbb rounded text-white font-bold text-2xl p-2">

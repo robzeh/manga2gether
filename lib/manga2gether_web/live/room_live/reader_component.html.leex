@@ -29,7 +29,8 @@
                     <div class="bg-aaa my-2 p-4 rounded text-white hover:bg-victoryblue cursor-pointer"
                         phx-click="get_chapters"
                         phx-target="<%= @myself %>"
-                        phx-value-id="<%= manga.id %>">
+                        phx-value-id="<%= manga.id %>"
+                        phx-value-title="<%= manga.title %>">
                       <div class="flex justify-between">
                         <div class="font-bold">
                           <%= manga.title %>

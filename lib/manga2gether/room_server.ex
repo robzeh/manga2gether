@@ -107,6 +107,13 @@ defmodule Manga2gether.RoomServer do
   def handle_cast({:set_manga, manga}, state) do
     new_manga = MangaSession.new(manga)
     broadcast!(state.room_code, "set_manga", %{manga: new_manga})
+
+    # update room in db
+    room = Rooms.get_room!(state.room_code)
+    {:ok, _} = Rooms.update_room(room, %{current_manga: new_manga.manga_title})
+    updated_rooms = Rooms.list_rooms()
+    Manga2getherWeb.Endpoint.broadcast!("rooms", "new_room", %{rooms: updated_rooms})
+
     {:noreply, %{state | manga: new_manga}}
   end
 
@@ -127,6 +134,14 @@ defmodule Manga2gether.RoomServer do
   @impl true
   def handle_cast({:set_reading, status}, state) do
     broadcast!(state.room_code, "reading_status", %{reading: status})
+    # if not reading, update room in db
+    if status == false do
+      room = Rooms.get_room!(state.room_code)
+      {:ok, _} = Rooms.update_room(room, %{current_manga: nil})
+      updated_rooms = Rooms.list_rooms()
+      Manga2getherWeb.Endpoint.broadcast!("rooms", "new_room", %{rooms: updated_rooms})
+    end
+
     {:noreply, %{state | reading: status}}
   end
 
