@@ -115,6 +115,12 @@ defmodule Manga2gether.Accounts.User do
     |> validate_password(opts)
   end
 
+  def username_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:username])
+    |> validate_username()
+  end
+
   @doc """
   Confirms the account by setting `confirmed_at`.
   """
