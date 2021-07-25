@@ -2,7 +2,7 @@
 
   <div class="w-2/3 md:w-1/3 pt-10 pb-2 flex justify-between">
     <h1 class="text-3xl font-bold text-gallery">Account Settings</h1>
-    <%= link "Home", to: Routes.dashboard_index_path(@conn, :index), class: "bg-bondiblue hover:bg-bondiblue-300 text-gallery rounded-lg p-2" %>
+    <%= link "Home", to: Routes.dashboard_index_path(@conn, :index), class: "bg-bondiblue hover:bg-bondiblue-300 text-ebonyclay rounded-lg py-2 px-4" %>
   </div>
 
   <div class="w-2/3 md:w-1/3 p-5 mt-2 bg-brightgray rounded-lg shadow-lg flex flex-col items-center overflow-y-auto">
@@ -27,8 +27,10 @@
         <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_email", class: "w-full rounded p-2" %>
         <%= error_tag f, :current_password %>
 
-        <div class="bg-bondiblue hover:bg-bondiblue-300 rounded-lg p-2 mt-2 text-center text-gallery">
-          <%= submit "Change email" %>
+        <div class="flex justify-center mt-1">
+          <div class="bg-bondiblue hover:bg-bondiblue-300 rounded-lg p-2 mt-2 text-center text-ebonyclay w-3/4">
+            <%= submit "Change username" %>
+          </div>
         </div>
       <% end %>
     </div>
@@ -85,12 +87,20 @@
         <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_password", class: "w-full rounded p-2" %>
         <%= error_tag f, :current_password %>
 
-        <div class="bg-bondiblue hover:bg-bondiblue-300 rounded-lg p-2 mt-2 text-center text-gallery">
-          <%= submit "Change password" %>
+        <div class="flex justify-center mt-1">
+          <div class="bg-bondiblue hover:bg-bondiblue-300 rounded-lg p-2 mt-2 text-center text-ebonyclay w-3/4">
+            <%= submit "Change password" %>
+          </div>
         </div>
       <% end %>
     </div>
 
+  </div>
+
+  <div class="w-2/3 md:w-1/3 p-5 mt-2 flex justify-center">
+    <div class="text-center bg-bondiblue hover:bg-bondiblue-300 cursor-pointer w-3/4 rounded shadow-lg text-ebonyclay p-2">
+      <%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %>
+    </div>
   </div>
 
 </div>
