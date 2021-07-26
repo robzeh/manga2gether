@@ -1,11 +1,11 @@
 <div class="w-full p-2 relative">
   <%= f = form_for :home_search, "#", phx_change: "filter_search", phx_target: @myself, class: "p-2 w-full flex justify-center" %>
-    <%= text_input f, :query, class: "w-1/2 rounded px-2 py-1", placeholder: "Search a room code, manga, room owner..." %>
+    <%= text_input f, :query, class: "w-1/2 rounded-lg p-2 shadow-lg", placeholder: "Search a room code, manga, room owner..." %>
   </form>
   <%= case @query do %>
     <% true -> %>
       <div class="absolute left-1/2 w-2/3">
-        <div class="relative -left-1/2 bg-coollavender w-full p-2 rounded shadow">
+        <div class="relative -left-1/2 bg-ebonyclay-400 w-full p-2 rounded shadow">
           <%= cond do %>
             <% length(@results) >= 1 -> %>
               <%= for result <- @results do %>

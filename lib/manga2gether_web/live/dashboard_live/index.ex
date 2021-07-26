@@ -59,6 +59,12 @@ defmodule Manga2getherWeb.DashboardLive.Index do
   end
 
   @impl true
+  def handle_event("account_settings", params, socket) do
+    IO.inspect(params)
+    {:noreply, push_redirect(socket, to: Routes.user_settings_path(socket, :edit))}
+  end
+
+  @impl true
   def handle_info(%{event: "new_room", payload: %{rooms: rooms}} = _params, socket) do
     {:noreply,
      socket

@@ -21,6 +21,7 @@ defmodule Manga2getherWeb.UserSessionController do
   def delete(conn, _params) do
     conn
     |> put_flash(:info, "Logged out successfully.")
+    |> redirect(to: Routes.user_session_path(conn, :new))
     |> UserAuth.log_out_user()
   end
 end

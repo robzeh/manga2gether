@@ -1,4 +1,4 @@
-<div class="w-screen h-screen bg-gray-800 flex p-5">
+<div class="w-screen h-screen bg-ebonyclay flex p-5">
 
   <%= if @live_action in [:new, :edit] do %>
     <%= live_modal @socket, Manga2getherWeb.RoomLive.FormComponent,
@@ -14,8 +14,8 @@
     <%= live_component Manga2getherWeb.DashboardLive.SearchComponent, id: "home_search_component", query: nil, rooms: @rooms, results: [] %>
 
     <div class="w-full flex justify-between p-2">
-      <h2 class="text-3xl text-white font-bold p-2">Top Rooms</h2>
-      <div class="w-2/5 bg-purple-600 hover:bg-purple-500 text-xl text-white text-center p-2 m-2 rounded"><%= live_patch "Create a Room", to: Routes.dashboard_index_path(@socket, :new) %></div>
+      <h2 class="text-3xl text-gallery font-bold p-2">Top Rooms</h2>
+      <div class="w-1/6 bg-bondiblue hover:bg-bondiblue-300 text-xl text-ebonyclay text-center p-3 m-2 rounded-lg shadow-lg cursor-pointer"><%= live_patch "Create a Room", to: Routes.dashboard_index_path(@socket, :new) %></div>
     </div>
 
 	  <div class="w-full h-4/5 overflow-y-auto scrollbar-thin scrollbar-thumb-coollavender scrollbar-track-bbb flex flex-wrap justify-between">
@@ -47,11 +47,22 @@
   </div>
 
   <div class="w-1/4 h-full flex flex-col px-2 py-4">
-    <div class="h-1/5 bg-bbb rounded text-white font-bold text-2xl p-2">
-      robzeh
+    <div class="h-1/6 bg-brightgray rounded-lg p-2 flex w-full justify-between items-center shadow-lg">
+      <img class="inline object-cover w-16 h-16 mx-2 rounded-full" src="<%= Routes.static_path(@socket, "/images/default_profile.png") %>" alt="Profile image"/>
+
+      <div class="w-3/5">
+        <h2 class="text-xl font-bold text-gallery"><%= @current_user.username %> </h2>
+        <p class="text-gallery">berserk > ur fav manga</p>
+      </div>
+      <div phx-click="account_settings" class="cursor-pointer w-1/5 flex justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="#EEEEEE">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </div>
     </div>
 
-    <div class="h-4/5 bg-bbb rounded text-white font-bold text-2xl p-2 mt-4">
+    <div class="h-5/6 bg-brightgray rounded-lg shadow-lg text-gallery font-bold text-2xl p-2 mt-4">
       Friends
     </div>
   </div>
