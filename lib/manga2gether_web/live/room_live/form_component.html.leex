@@ -5,23 +5,23 @@
   phx_target: @myself,
   phx_change: "validate",
   phx_submit: "save",
-	class: "h-full w-1/2 p-5 flex flex-col m-auto" %>
+	class: "h-full w-2/3 p-5 flex flex-col m-auto" %>
 
 	<div>
-  	<%= label f, :name %>
-  	<%= text_input f, :name, class: "w-full rounded p-1" %>
+  	<%= label f, :name, class: "text-gallery text-sm" %>
+  	<%= text_input f, :name, class: "w-full rounded shadow-lg p-2" %>
   	<%= error_tag f, :name %>
 	</div>
 
 	<div>
-    <%= label f, :description %>
-    <%= text_input f, :description, class: "w-full rounded p-1" %>
+    <%= label f, :description, class: "text-gallery text-sm" %>
+    <%= text_input f, :description, class: "w-full rounded shadow-lg p-2" %>
     <%= error_tag f, :description %>
 	</div>
 
-  <div>
-    <%= label f, :private %>
-    <%= checkbox f, :private %>
+  <div class="flex justify-center mt-2">
+    <%= label f, :private, class: "text-gallery mr-1" %>
+    <%= checkbox f, :private, class: "ml-1" %>
   </div>
 
 	<!--
@@ -30,5 +30,5 @@
   <%= error_tag f, :room_code %>
 	-->
 
-  <%= submit "Create", phx_disable_with: "Creating...", class: "bg-purple-600 text-white rounded p-2 mt-2" %>
+  <%= submit "Create", phx_disable_with: "Creating...", class: "w-1/2 mx-auto bg-bondiblue hover:bg-bondiblue-300 text-xl text-ebonyclay text-center p-3 m-2 rounded-lg shadow-lg cursor-pointer" %>
 </form>

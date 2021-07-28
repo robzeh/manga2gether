@@ -12,8 +12,8 @@ defmodule Manga2getherWeb.ModalComponent do
       phx-target="#<%= @id %>"
       phx-page-loading>
 
-      <div class="bg-gray-500 p-10 w-4/5 h-1/2 m-auto rounded">
-        <%= live_patch raw("&times;"), to: @return_to, class: "float-right" %>
+      <div class="bg-ebonyclay p-10 w-2/5 h-1/2 m-auto rounded-lg shadow-2xl">
+        <%= live_patch raw("&times;"), to: @return_to, class: "float-right text-gallery" %>
         <%= live_component @socket, @component, @opts %>
       </div>
     </div>

@@ -64,8 +64,6 @@ defmodule Manga2gether.Rooms do
   def create_room(attrs \\ %{}) do
     room = Room.generate_room_code(attrs)
 
-    IO.inspect(room)
-
     %Room{}
     |> Room.changeset(room)
     |> Repo.insert()
