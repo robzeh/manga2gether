@@ -37,6 +37,7 @@ defmodule Manga2getherWeb.RoomLive.Show do
      |> assign(:color, color)
      |> assign(:owner, RoomServer.is_owner(room_code, user.id))
      |> assign(:users, users.users)
+     |> assign(:chat, "")
      |> assign(:messages, []), temporary_assigns: [messages: []]}
   end
 
@@ -116,9 +117,17 @@ defmodule Manga2getherWeb.RoomLive.Show do
 
   ################################################################################
 
+  ### Clear chat input
+  @impl true
+  def handle_event("set_chat", %{"chat_message" => %{"chat" => message}} = _params, socket) do
+    {:noreply,
+      socket
+      |> assign(:chat, message)}
+  end
+
   ### Room user sends chat message
   @impl true
-  def handle_event("send_chat", %{"chat_message" => %{"message" => message}} = _params, socket) do
+  def handle_event("send_chat", %{"chat_message" => %{"chat" => message}} = _params, socket) do
     broadcast!(socket.assigns.current_room.room_code, "new_message", %{
       id: Ecto.UUID.generate(),
       sender: socket.assigns.current_user.username,
@@ -126,7 +135,9 @@ defmodule Manga2getherWeb.RoomLive.Show do
       message: message
     })
 
-    {:noreply, socket}
+    {:noreply,
+      socket
+      |> assign(:chat, "")}
   end
 
   ### Room user clicks ready button
@@ -173,5 +184,11 @@ defmodule Manga2getherWeb.RoomLive.Show do
     # broadcast room reading state change
     RoomServer.set_reading(socket.assigns.current_room.room_code, false)
     {:noreply, socket}
+  end
+
+  ### User leaves room
+  @impl true
+  def handle_event("leave_room", _params, socket) do
+    {:noreply, push_redirect(socket, to: Routes.dashboard_index_path(socket, :index))}
   end
 end

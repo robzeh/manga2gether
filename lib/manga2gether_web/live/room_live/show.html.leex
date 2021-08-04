@@ -1,4 +1,4 @@
-<div id="room" class="w-screen h-screen bg-aaa flex flex-row">
+<div id="room" class="w-screen h-screen bg-ebonyclay flex flex-row">
   <div class="w-3/4 flex flex-col">
     <div class="">
       <%= live_component Manga2getherWeb.RoomLive.ReaderComponent,
@@ -13,7 +13,7 @@
 
     <%= case @owner do %>
       <% true -> %>
-        <div class="bg-bb w-full h-1/10 p-2 flex justify-between content-center border-t border-opacity-25 border-gray-200">
+        <div class="bg-ebonyclay w-full h-1/10 p-2 flex justify-between content-center border-t border-opacity-25 border-gray-200">
           <button class="bg-ddd rounded p-1 px-6 text-white" phx-click="prev_page" type="button">Prev</button>
           <button class="bg-ddd rounded p-1 px-6 text-white" phx-click="show_search" type="button">Search</button>
           <!-- Send next_page event to reader_component and this liveview  phx-target="#reader_component, #room"  -->
@@ -28,15 +28,23 @@
     <% end %>
   </div>
 
-  <div class="bg-bb w-1/4 flex flex-col border-l border-opacity-25 border-gray-200">
+  <div class="bg-ebonyclay w-1/4 flex flex-col border-l border-opacity-25 border-gallery">
     <div class="h-9/10">
 
       <!-- Users-->
       <div class="h-1/2">
-        <div class="p-2 border-b border-opacity-25 border-gray-200 text-white">
-          Readers
+        <div class="p-2 flex justify-between">
+          <h2 class="text-gallery">Room Code: <span class="font-bold"><%= @current_room.room_code %></span></h2>
+          <div phx-click="leave_room" class="cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gallery" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </div>
         </div>
-        <div class="p-2">
+        <div class="p-2 border-b border-opacity-25 border-gallery">
+          <h2 class="font-bold text-gallery">Readers</h2>
+        </div>
+        <div class="py-2">
           <%= for user <- @users do %>
             <div class="flex justify-between items-center">
               <p class="p-2 text-white text-<%= user.color %>-500 "><%= user.username %></p>
@@ -50,7 +58,7 @@
 
       <div class="h-1/2 flex flex-col">
         <div class="border-b border-t border-opacity-25 border-gray-200 p-2 text-white">
-          Chat
+          <h2 class="font-bold text-gallery">Chat</h2>
         </div>
 
         <div class="overflow-y-auto">
@@ -66,14 +74,12 @@
 
     </div>
 
-    <div class="border-t border-opacity-25 border-gray-200 h-1/10 w-full">
-      <%= f= form_for :chat_message, "#", phx_submit: "send_chat", class: "p-2 w-full" %>
-        <%= text_input f, :message, class: "w-full" %>
-        <div class="flex justify-between mt-2">
-          <!-- TODO: diasble -->
-          <button class="bg-coollavender px-2 rounded text-white" phx-click="ready" type="button">Ready</button>
-          <%= submit "Send", class: "bg-victoryblue text-white px-2 rounded" %>
-        </div>
+    <%# <button class="bg-coollavender px-2 rounded text-white" phx-click="ready" type="button">Ready</button> %>
+
+    <div class="border-t border-opacity-25 border-gray-200 h-1/10 w-full flex">
+      <%= f= form_for :chat_message, "#", phx_submit: "send_chat", phx_change: "set_chat", class: "my-auto p-2 h-2/3 w-full flex justify-between" %>
+        <%= text_input f, :chat, class: "w-5/6 rounded-lg shadow-lg p-2 mr-1" %>
+        <%= submit "Send", class: "bg-bondiblue hover:bg-bondiblue-300 text-ebonyclay py-2 ml-1 rounded-lg shadow-lg w-1/6" %>
       </form>
     </div>
 
