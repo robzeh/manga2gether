@@ -13,16 +13,18 @@
 
     <%= case @owner do %>
       <% true -> %>
-        <div class="bg-ebonyclay w-full h-1/10 p-2 flex justify-between content-center border-t border-opacity-25 border-gray-200">
-          <button class="bg-ddd rounded p-1 px-6 text-white" phx-click="prev_page" type="button">Prev</button>
-          <button class="bg-ddd rounded p-1 px-6 text-white" phx-click="show_search" type="button">Search</button>
-          <!-- Send next_page event to reader_component and this liveview  phx-target="#reader_component, #room"  -->
-          <button class="bg-ddd rounded p-1 px-6 text-white" phx-click="next_page" type="button">Next</button>
+        <div class="bg-ebonyclay w-full h-1/10 p-5 flex justify-center content-center border-t border-opacity-25 border-gallery">
+          <button class="bg-bondiblue hover:bg-bondiblue-300 rounded-lg shadow-lg text-ebonyclay px-4" phx-click="show_search" type="button">Search</button>
+          <div class="text-white m-auto"><%= @current_room.manga.current_idx + 1 %>/<%= length(@current_room.manga.pages) %></div>
+          <button class="bg-bondiblue hover:bg-bondiblue-300 rounded-lg shadow-lg text-ebonyclay px-4" phx-click="prev_page" type="button">Prev</button>
+          <button class="bg-bondiblue hover:bg-bondiblue-300 rounded-lg shadow-lg text-ebonyclay px-4 ml-2" phx-click="next_page" type="button">Next</button>
+          <button class="bg-bondiblue hover:bg-bondiblue-300 text-ebonyclay px-4 rounded-lg shadow-lg ml-2" phx-click="ready" type="button">Ready</button>
         </div>
       <% false -> %>
         <%= if @current_room.reading do %>
-          <div class="bg-bb w-full h-1/10 p-2 flex justify-center content-center border-t border-opacity-25 border-gray-200">
+          <div class="bg-ebonyclay w-full h-1/10 p-5 flex justify-center content-center border-t border-opacity-25 border-gallery">
             <div class="text-white m-auto"><%= @current_room.manga.current_idx + 1 %>/<%= length(@current_room.manga.pages) %></div>
+            <button class="bg-bondiblue hover:bg-bondiblue-300 text-ebonyclay px-4 rounded-lg shadow-lg" phx-click="ready" type="button">Ready</button>
           </div>
         <% end %>
     <% end %>
@@ -74,7 +76,6 @@
 
     </div>
 
-    <%# <button class="bg-coollavender px-2 rounded text-white" phx-click="ready" type="button">Ready</button> %>
 
     <div class="border-t border-opacity-25 border-gray-200 h-1/10 w-full flex">
       <%= f= form_for :chat_message, "#", phx_submit: "send_chat", phx_change: "set_chat", class: "my-auto p-2 h-2/3 w-full flex justify-between" %>

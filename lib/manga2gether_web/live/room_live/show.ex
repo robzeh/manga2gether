@@ -128,12 +128,14 @@ defmodule Manga2getherWeb.RoomLive.Show do
   ### Room user sends chat message
   @impl true
   def handle_event("send_chat", %{"chat_message" => %{"chat" => message}} = _params, socket) do
-    broadcast!(socket.assigns.current_room.room_code, "new_message", %{
-      id: Ecto.UUID.generate(),
-      sender: socket.assigns.current_user.username,
-      color: socket.assigns.color,
-      message: message
-    })
+    if String.length(message) > 0 do
+      broadcast!(socket.assigns.current_room.room_code, "new_message", %{
+        id: Ecto.UUID.generate(),
+        sender: socket.assigns.current_user.username,
+        color: socket.assigns.color,
+        message: message
+      })
+    end
 
     {:noreply,
       socket
