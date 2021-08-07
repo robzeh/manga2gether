@@ -35,7 +35,8 @@
 
       <!-- Users-->
       <div class="h-1/2">
-        <div class="p-2 flex justify-between">
+        <h1 class="text-gallery font-bold text-xl pt-2 px-2"><%= @current_room.room_name %></h1>
+        <div class="px-2 flex justify-between">
           <h2 class="text-gallery">Room Code: <span class="font-bold"><%= @current_room.room_code %></span></h2>
           <div phx-click="leave_room" class="cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gallery" fill="none" viewBox="0 0 24 24" stroke="currentColor">

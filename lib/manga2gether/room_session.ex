@@ -5,6 +5,7 @@ defmodule Manga2gether.RoomSession do
   # TODO: really need id, owner?
   defstruct room_id: nil,
             room_code: nil,
+            room_name: nil,
             owner_id: nil,
             users: [],
             reading: false,
@@ -13,6 +14,7 @@ defmodule Manga2gether.RoomSession do
   @type t :: %__MODULE__{
           room_id: Ecto.UUID.t(),
           room_code: integer(),
+          room_name: String.t(),
           owner_id: Ecto.UUID.t(),
           users: list(RoomUser.t()),
           reading: boolean(),

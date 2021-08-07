@@ -52,6 +52,7 @@ defmodule Manga2gether.Application do
       Manga2gether.RoomSupervisor.start_room(%{
         room_id: room.id,
         room_code: room.room_code,
+        room_name: room.name,
         owner_id: room.owner_id
       })
     end)

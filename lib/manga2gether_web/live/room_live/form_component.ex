@@ -48,6 +48,7 @@ defmodule Manga2getherWeb.RoomLive.FormComponent do
            RoomSupervisor.start_room(%{
              room_id: room.id,
              room_code: room.room_code,
+             room_name: room.name,
              owner_id: room.owner_id
            }) do
       rooms = Rooms.list_rooms()
