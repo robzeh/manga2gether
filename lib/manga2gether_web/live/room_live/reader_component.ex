@@ -9,10 +9,14 @@ defmodule Manga2getherWeb.RoomLive.ReaderComponent do
       {:ok, results} ->
         {:noreply,
          socket
-         |> assign(:search_results, results)}
+         |> assign(:search_results, results)
+         |> assign(:chapter_results, [])
+         |> assign(:error, false)}
 
       {:error, _} ->
-        {:noreply, socket}
+        {:noreply,
+         socket
+         |> assign(:error, true)}
     end
   end
 
@@ -23,10 +27,13 @@ defmodule Manga2getherWeb.RoomLive.ReaderComponent do
          socket
          |> assign(:chapter_results, results)
          |> assign(:manga_id, manga_id)
-         |> assign(:manga_title, manga_title)}
+         |> assign(:manga_title, manga_title)
+         |> assign(:error, false)}
 
       {:error, _} ->
-        {:noreply, socket}
+        {:noreply,
+         socket
+         |> assign(:error, true)}
     end
   end
 
@@ -51,7 +58,8 @@ defmodule Manga2getherWeb.RoomLive.ReaderComponent do
     {:noreply,
      socket
      |> assign(:chapter_results, [])
-     |> assign(:search_results, [])}
+     |> assign(:search_results, [])
+     |> assign(:error, false)}
   end
 
   def handle_event("load_more", %{"id" => manga_id} = _params, socket) do

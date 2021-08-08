@@ -21,12 +21,15 @@
               <%= submit "Search", class: "bg-bondiblue hover:bg-bondiblue-300 text-gallery p-2 mx-1 rounded-lg" %>
             </form>
 
-            <div class="w-full max-h-full p-2 overflow-y-auto">
+            <div class="w-full max-h-full p-2 overflow-y-auto flex flex-col">
               <%= cond do %>
                 <% length(@chapter_results) == 0 -> %>
+                  <%= if @error do %>
+                    <p class="m-auto text-xl font-bold text-red-500">MangaDex servers are currrently unavailable</p>
+                  <% end %>
                   <!-- Manga results -->
                   <%= for manga <- @search_results do %>
-                    <div class="bg-ebonyclay my-2 p-4 rounded-lg shadow-lg text-gallery hover:bg-ebonyclay-300 cursor-pointer"
+                    <div class="bg-ebonyclay my-2 p-4 rounded-lg shadow-lg text-gallery hover:bg-ebonyclay-300 cursor-pointer w-full"
                         phx-click="get_chapters"
                         phx-target="<%= @myself %>"
                         phx-value-id="<%= manga.id %>"
@@ -45,9 +48,12 @@
                     </div>
                   <% end %>
                 <% true -> %>
+                  <%= if @error do %>
+                    <p class="m-auto text-xl font-bold text-red-500">MangaDex servers are currrently unavailable</p>
+                  <% end %>
                   <!-- Chapter results -->
                   <%= for chapter <- @chapter_results do %>
-                    <div class="bg-aaa my-2 p-4 rounded text-white hover:bg-victoryblue cursor-pointer"
+                    <div class="bg-ebonyclay my-2 p-4 rounded-lg shadow-lg text-gallery hover:bg-ebonyclay-300 cursor-pointer"
                         phx-click="get_chapter"
                         phx-target="<%= @myself %>"
                         phx-value-id="<%= chapter.id %>">
@@ -64,7 +70,7 @@
                     </div>
                   <% end %>
 
-                  <button class="bg-aaa my-2 p-4 rounded text-white hover:bg-victoryblue cursor-pointer"
+                  <button class="bg-ebonyclay my-2 p-4 rounded-lg shadow-lg text-gallery hover:bg-ebonyclay-300 cursor-pointer m-auto"
                     phx-click="load_more"
                     phx-target="<%= @myself %>"
                     phx-value-id="<%= @manga_id %>">Load more</button>
@@ -75,7 +81,7 @@
 
           </div>
         <% false -> %>
-          <div class="text-white m-auto p-2">The owner has not chosen a manga. Suggest one in the chat.</div>
+          <div class="text-gallery m-auto p-2">The owner has not chosen a manga. Suggest one in the chat.</div>
       <% end %>
   <% end %>
 </div>
