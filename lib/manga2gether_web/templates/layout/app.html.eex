@@ -1,5 +1,11 @@
-<main role="main" class="container">
-  <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-  <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+<main role="main" class="">
+  <div class="absolute left-1/2">
+    <%= if get_flash(@conn, :info) do %>
+      <p class="relative -left-1/2 bg-bondiblue p-2 mt-2 rounded-lg shadow-lg text-gallery font-bold" role="alert"><%= get_flash(@conn, :info) %></p>
+    <% end %>
+    <%= if get_flash(@conn, :error) do %>
+      <p class="relative -left-1/2 bg-red-500 p-2 mt-2 rounded-lg shadow-lg text-gallery font-bold" role="alert"><%= get_flash(@conn, :error) %></p>
+    <% end %>
+  </div>
   <%= @inner_content %>
 </main>
