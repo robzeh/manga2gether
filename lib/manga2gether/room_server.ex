@@ -183,6 +183,10 @@ defmodule Manga2gether.RoomServer do
     users = Manga2getherWeb.Presence.list_users(room_code)
     num_ppl = Manga2getherWeb.Presence.room_size(room_code)
 
+    if num_ppl == 0 do
+      end_room(room_code)
+    end
+
     # Num ppl in room changed, update room in db
     if length(room_users) != num_ppl do
       room = Rooms.get_room!(room_code)
