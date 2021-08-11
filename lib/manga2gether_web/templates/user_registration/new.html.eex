@@ -35,7 +35,7 @@
 			</div>
 
 	  	    <div class="mt-6 w-full flex justify-center">
-	  	      <%= submit "Register", class: "bg-bondiblue hover:bg-bondiblue-300 text-center text-ebonyclay py-3 rounded w-3/4" %>
+	  	      <%= submit "Register", class: "bg-bondiblue hover:bg-bondiblue-300 text-center text-ebonyclay py-3 rounded w-3/4 rounded-lg shadow-lg" %>
 	  	    </div>
 
 			<div class="flex flex-col items-center">
@@ -45,7 +45,7 @@
 	  		  </p>
 			  -->
 			  <p class="text-gallery font-light my-1">Or</p>
-			  <div class="text-center bg-bondiblue hover:bg-bondiblue-300 cursor-pointer w-3/4 rounded shadow-lg text-ebonyclay py-3">
+			  <div class="text-center bg-bondiblue hover:bg-bondiblue-300 cursor-pointer w-3/4 rounded-lg shadow-lg text-ebonyclay py-3">
 	  		    <%= link "Login with Discord", to: Routes.user_o_auth_path(@conn, :request, "discord") %>
 			  </div>
 			</div>

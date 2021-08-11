@@ -1,11 +1,25 @@
-<main role="main" class="container">
-  <p class="alert alert-info" role="alert"
-    phx-click="lv:clear-flash"
-    phx-value-key="info"><%= live_flash(@flash, :info) %></p>
-
-  <p class="alert alert-danger" role="alert"
-    phx-click="lv:clear-flash"
-    phx-value-key="error"><%= live_flash(@flash, :error) %></p>
-
+<main role="main">
+  <div class="absolute left-1/2">
+    <%= if live_flash(@flash, :info) do %>
+      <div class="relative -left-1/2 bg-bondiblue p-2 mt-2 rounded-lg shadow-lg text-gallery font-bold flex cursor-pointer z-50" role="alert"
+        phx-click="lv:clear-flash"
+        phx-value-key="info">
+        <%= live_flash(@flash, :info) %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-ebonyclay" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </div>
+    <% end %>
+    <%= if live_flash(@flash, :error) do %>
+      <div class="relative -left-1/2 bg-red-500 p-2 mt-2 rounded-lg shadow-lg text-gallery font-bold flex cursor-pointer z-50" role="alert"
+        phx-click="lv:clear-flash"
+        phx-value-key="error">
+        <%= live_flash(@flash, :error) %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-ebonyclay" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </div>
+    <% end %>
+  </div>
   <%= @inner_content %>
 </main>
