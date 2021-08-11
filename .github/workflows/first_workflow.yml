@@ -1,22 +1,22 @@
-name: Deployment Workflow
-on:
-  push: 
-    branches: [ master ]
-
-jobs: 
-  job_one:
-    name: Deploy
-    runs-on: ubuntu-latest
-    steps:
-    - name: testing manga2gether.com server ssh connection
-      uses: appleboy/ssh-action@master
-      with:
-        host: manga2gether.com
-        username: robie
-        key: ${{ secrets.MANGA2GETHER_SECRET }}
-        passphrase: ${{ secrets.SSH_PASSPHRASE }}
-        port: 22
-        script: |
-          cd projects/manga2gether
-          git pull origin master
-          git status
+# name: Deployment Workflow
+# on:
+#   push: 
+#     branches: [ master ]
+# 
+# jobs: 
+#   job_one:
+#     name: Deploy
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: testing manga2gether.com server ssh connection
+#       uses: appleboy/ssh-action@master
+#       with:
+#         host: manga2gether.com
+#         username: robie
+#         key: ${{ secrets.MANGA2GETHER_SECRET }}
+#         passphrase: ${{ secrets.SSH_PASSPHRASE }}
+#         port: 22
+#         script: |
+#           cd projects/manga2gether
+#           git pull origin master
+#           git status
