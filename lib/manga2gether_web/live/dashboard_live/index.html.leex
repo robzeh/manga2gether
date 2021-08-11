@@ -18,31 +18,33 @@
       <div class="w-1/6 bg-bondiblue hover:bg-bondiblue-300 text-xl text-ebonyclay text-center p-3 m-2 rounded-lg shadow-lg cursor-pointer"><%= live_patch "Create a room", to: Routes.dashboard_index_path(@socket, :new) %></div>
     </div>
 
-	  <div class="w-full h-4/5 overflow-y-auto scrollbar-thin scrollbar-thumb-brightgray scrollbar-track-ebonyclay flex flex-wrap justify-between">
-	    <%= for room <- @rooms do %>
-	  	  <div phx-click="join_room" phx-value-code="<%= room.room_code %>" class="w-48% h-1/6 bg-brightgray hover:bg-brightgray-400 cursor-pointer flex flex-col rounded-lg shadow-lg mx-2 p-4  my-2">
-	  			<div class="flex justify-between">
-	  		  	<p class=" text-xl font-bold text-gallery inline"><%= room.name %></p>
-            <div class="flex items-center">
-              <div class="bg-bondiblue p-2 px-2 rounded-full h-4 mr-1"></div>
-	  				  <p class="text-gallery font-bold"><%= room.num_ppl %> </p>
-            </div>
-	  			</div>
-	  			<div class="flex justify-between mt-1">
-	  		  	<p class="font-light text-gallery inline"><%= room.description %></p>
-	  				<p class="font-bold text-gallery inline"><%= room.user.username %></p>
-	  			</div>
+    <div class="h-4/5 overflow-y-auto scrollbar-thin scrollbar-thumb-brightgray scrollbar-track-ebonyclay">
+	    <div class="w-full flex flex-wrap justify-between">
+	      <%= for room <- @rooms do %>
+	    	  <div phx-click="join_room" phx-value-code="<%= room.room_code %>" class="w-48% bg-brightgray hover:bg-brightgray-400 cursor-pointer flex flex-col rounded-lg shadow-lg mx-2 p-4 my-2">
+	    			<div class="flex justify-between">
+	    		  	<p class=" text-xl font-bold text-gallery inline"><%= room.name %></p>
+              <div class="flex items-center">
+                <div class="bg-bondiblue p-2 px-2 rounded-full h-4 mr-1"></div>
+	    				  <p class="text-gallery font-bold"><%= room.num_ppl %> </p>
+              </div>
+	    			</div>
+	    			<div class="flex justify-between mt-1">
+	    		  	<p class="font-light text-gallery inline"><%= room.description %></p>
+	    				<p class="font-bold text-gallery inline"><%= room.user.username %></p>
+	    			</div>
 
-          <%= cond do %>
-            <% room.current_manga != nil -> %>
-              <p class="font-light text-gallery mt-1">Reading: <span class="font-bold"><%= room.current_manga %></span></p>
-            <% true -> %>
-              <p class="hidden"></p>
-          <% end %>
+            <%= cond do %>
+              <% room.current_manga != nil -> %>
+                <p class="font-light text-gallery mt-1">Reading: <span class="font-bold"><%= room.current_manga %></span></p>
+              <% true -> %>
+                <p class="hidden"></p>
+            <% end %>
 
-	  		</div>
-	  	<% end %>
-	  </div>
+	    		</div>
+	    	<% end %>
+	    </div>
+    </div>
 
   </div>
 
