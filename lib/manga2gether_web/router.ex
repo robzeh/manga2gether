@@ -18,13 +18,15 @@ defmodule Manga2getherWeb.Router do
   end
 
   scope "/", Manga2getherWeb do
-    pipe_through [:browser, :require_authenticated_user]
-
-    # live "/", PageLive, :index
+    pipe_through [:browser, :require_authenticated_user, :maybe_redirect_room]
 
     live "/", DashboardLive.Index, :index
     live "/room/new", DashboardLive.Index, :new
     live "/room/:id/edit", DashboardLive.Index, :edit
+  end
+
+  scope "/", Manga2getherWeb do
+    pipe_through [:browser, :require_authenticated_user]
 
     live "/room/:room_code", RoomLive.Show, :show
     live "/room/:id/show/edit", RoomLive.Show, :edit

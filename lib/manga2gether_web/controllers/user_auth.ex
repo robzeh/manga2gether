@@ -108,6 +108,16 @@ defmodule Manga2getherWeb.UserAuth do
     end
   end
 
+  def maybe_redirect_room(conn, _opts) do
+    if conn.assigns[:current_user].room do
+      conn
+      |> redirect(to: Routes.room_show_path(conn, :show, conn.assigns[:current_user].room.room_code))
+      |> halt()
+    else
+      conn
+    end
+  end
+
   @doc """
   Used for routes that require the user to not be authenticated.
   """
