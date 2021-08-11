@@ -13,32 +13,42 @@ defmodule Manga2getherWeb.RoomLive.Show do
       ) do
     user = assign_user(socket, session_token) |> Map.get(:assigns) |> Map.get(:current_user)
     room = RoomServer.get_room(String.to_integer(room_code))
-    color = RoomUser.assign_color()
 
-    if connected?(socket) do
-      room_user = RoomUser.new(%{username: user.username, color: color})
-      Manga2getherWeb.Endpoint.subscribe("room:#{room_code}")
+    # room doesnt exist anymore, redirect to dashboard
+    if room == nil do
+      {:ok,
+       socket
+       |> put_flash(:error, "That room is no longer available.")
+       |> push_redirect(to: Routes.dashboard_index_path(socket, :index))}
+    else
+      color = RoomUser.assign_color()
 
-      Manga2getherWeb.Presence.track(
-        self(),
-        "room:#{room_code}",
-        user.id,
-        room_user
-      )
+      if connected?(socket) do
+        room_user = RoomUser.new(%{username: user.username, color: color})
+        Manga2getherWeb.Endpoint.subscribe("room:#{room_code}")
+
+        Manga2getherWeb.Presence.track(
+          self(),
+          "room:#{room_code}",
+          user.id,
+          room_user
+        )
+      end
+
+      # TODO: redo
+      users = room_code |> String.to_integer() |> RoomServer.get_users()
+
+      {:ok,
+       socket
+       |> assign(:current_room, room)
+       |> assign(:current_user, user)
+       |> assign(:color, color)
+       |> assign(:owner, RoomServer.is_owner(room_code, user.id))
+       |> assign(:users, users.users)
+       |> assign(:chat, "")
+       |> assign(:messages, []), temporary_assigns: [messages: []]}
     end
 
-    # TODO: redo
-    users = room_code |> String.to_integer() |> RoomServer.get_users()
-
-    {:ok,
-     socket
-     |> assign(:current_room, room)
-     |> assign(:current_user, user)
-     |> assign(:color, color)
-     |> assign(:owner, RoomServer.is_owner(room_code, user.id))
-     |> assign(:users, users.users)
-     |> assign(:chat, "")
-     |> assign(:messages, []), temporary_assigns: [messages: []]}
   end
 
   defp broadcast!(room_code, event, message) do
@@ -108,6 +118,15 @@ defmodule Manga2getherWeb.RoomLive.Show do
     {:noreply,
      socket
      |> assign(:current_room, %{socket.assigns.current_room | manga: new_manga})}
+  end
+
+  @impl true
+  def handle_info(%{event: "end_room"} = _message, socket) do
+    # redirect to home
+    {:noreply,
+      socket
+      |> put_flash(:error, "The owner has ended this room.")
+      |> push_redirect(to: Routes.dashboard_index_path(socket, :index))}
   end
 
   @impl true
@@ -192,5 +211,12 @@ defmodule Manga2getherWeb.RoomLive.Show do
   @impl true
   def handle_event("leave_room", _params, socket) do
     {:noreply, push_redirect(socket, to: Routes.dashboard_index_path(socket, :index))}
+  end
+
+  ### Owner ends room
+  @impl true
+  def handle_event("end_room", _params, socket) do
+    RoomServer.end_room(socket.assigns.current_room.room_code)
+    {:noreply, socket}
   end
 end

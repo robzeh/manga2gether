@@ -21,6 +21,11 @@ defmodule Manga2gether.RoomServer do
     {:ok, RoomSession.new(room)}
   end
 
+  @impl true
+  def terminate(_reason, _state) do
+    :ok
+  end
+
   ################################################################################
   ### Misc
 
@@ -62,7 +67,12 @@ defmodule Manga2gether.RoomServer do
 
   @spec get_room(integer()) :: RoomSession.t()
   def get_room(room_code) do
-    call(room_code, :get_room)
+    cond do
+      room_pid(room_code) == nil ->
+        nil
+      true ->
+        call(room_code, :get_room)
+    end
   end
 
   def get_users(room_code) do
@@ -89,6 +99,10 @@ defmodule Manga2gether.RoomServer do
     cast(room_code, {:set_reading, status})
   end
 
+  def end_room(room_code) do
+    cast(room_code, {:end_room})
+  end
+
   ################################################################################
   ### Server
 
@@ -101,6 +115,21 @@ defmodule Manga2gether.RoomServer do
   def handle_call(:get_users, _reply, state) do
     users = Manga2getherWeb.Presence.list_users(state.room_code)
     {:reply, %{users: users}, state}
+  end
+
+  @impl true
+  def handle_cast({:end_room}, state) do
+    # broadcast to room users
+    broadcast!(state.room_code, "end_room", %{})
+
+    # delete room in db
+    room = Rooms.get_room!(state.room_code)
+    {:ok, _} = Rooms.delete_room(room)
+    updated_rooms = Rooms.list_rooms()
+    Manga2getherWeb.Endpoint.broadcast!("rooms", "new_room", %{rooms: updated_rooms})
+
+    # End genserver
+    {:stop, :normal, state}
   end
 
   @impl true

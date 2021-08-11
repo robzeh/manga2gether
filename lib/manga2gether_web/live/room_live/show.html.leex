@@ -38,15 +38,27 @@
 
       <!-- Users-->
       <div class="h-1/2">
-        <h1 class="text-gallery font-bold text-xl pt-2 px-2"><%= @current_room.room_name %></h1>
-        <div class="px-2 flex justify-between">
-          <h2 class="text-gallery">Room Code: <span class="font-bold"><%= @current_room.room_code %></span></h2>
-          <div phx-click="leave_room" class="cursor-pointer">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gallery" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
+        <div class="flex justify-between">
+          <div>
+            <h1 class="text-gallery font-bold text-xl pt-2 px-2"><%= @current_room.room_name %></h1>
+            <h2 class="text-gallery px-2">Room Code: <span class="font-bold"><%= @current_room.room_code %></span></h2>
+          </div>
+          <div class="self-center">
+            <%= case @owner do %>
+              <% true -> %>
+                <div phx-click="end_room" class="cursor-pointer bg-red-500 hover:bg-red-400 rounded-lg shadow-lg p-1 mr-2 text-gallery">
+                  End Room
+                </div>
+              <% false -> %>
+                <div phx-click="leave_room" class="cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gallery mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                </div>
+            <% end %>
           </div>
         </div>
+
         <div class="p-2 border-b border-opacity-25 border-gallery">
           <h2 class="font-bold text-gallery">Readers</h2>
         </div>
