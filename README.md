@@ -1,8 +1,10 @@
 # manga2gether
 
-test
+  Read manga with your friends in a Twitch/YouTube like way. Create rooms, query [MangaDex](https://mangadex.org/) and read pages synchronously.
 
-To start your Phoenix server:
+### Development
+
+To start Phoenix server:
 
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
@@ -11,12 +13,6 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
+**Learn more**
   * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
   * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
